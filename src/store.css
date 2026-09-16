@@ -1,8 +1,10 @@
 /* Page enter: one short fade when the route changes */
-.page { animation: page-in .28s var(--ease) both; }
+/* "backwards", not "both": a transform kept after the animation ends would make the page the
+   containing block for position:fixed children, pinning the bottom bars to the end of the page. */
+.page { animation: page-in .28s var(--ease) backwards; }
 @keyframes page-in { from { opacity: 0; transform: translateY(6px); } }
 @keyframes fade-in { from { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .page { animation: fade-in .2s ease both; } }
+@media (prefers-reduced-motion: reduce) { .page { animation: fade-in .2s ease backwards; } }
 
 .card { text-decoration: none; }
 @media (hover: none) { .card:hover .card-media img { transform: none; } }
@@ -140,7 +142,6 @@
 .model-option input:focus-visible + span { outline: 2px solid var(--ink); outline-offset: 2px; }
 .model-picker[data-missing="true"] .model-option span { border-color: #b3261e; }
 .model-hint { margin-top: 6px; font-size: 13px; font-weight: 500; color: #b3261e; }
-.pack-page .model-picker { max-width: 420px; }
 .pdp-more .section-title { margin-bottom: 28px; }
 .more-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 @media (max-width: 900px) {
@@ -152,7 +153,7 @@
 @media (max-width: 420px) { .specs { grid-template-columns: 1fr; } }
 
 /* Pack builder */
-.pack-page { display: flex; flex-direction: column; gap: 20px; padding-bottom: 160px; }
+.pack-page { display: flex; flex-direction: column; gap: 20px; }
 .pack-page-head h1 { font-size: clamp(36px, 4.5vw, 56px); font-weight: 700; line-height: 1.05; }
 .pack-page-head p { margin-top: 10px; color: var(--graphite); max-width: 52ch; }
 .pick-grid { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 10px; }
@@ -163,17 +164,6 @@
 .pick[aria-pressed="true"] .card-media { outline-color: var(--ink); }
 .pick-mark { position: absolute; top: 12px; right: 12px; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: var(--paper); opacity: 0; transform: scale(0.9); transition: opacity .2s ease, transform .25s var(--ease); }
 .pick[aria-pressed="true"] .pick-mark { opacity: 1; transform: none; }
-.pack-bar {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
-  display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
-  padding: 16px var(--gutter) calc(16px + env(safe-area-inset-bottom, 0px));
-  background: var(--paper); border-top: 1px solid var(--line); box-shadow: 0 -8px 24px rgba(0,0,0,0.06);
-}
-.pack-bar > div:first-child { display: flex; flex-direction: column; min-width: 0; }
-.pack-bar > div:first-child span { font-size: 14px; color: var(--graphite); overflow-wrap: anywhere; }
-.pack-bar-buy { display: flex; align-items: center; gap: 16px; }
-.pack-bar-buy b { font-size: 20px; font-variant-numeric: tabular-nums; }
-@media (max-width: 600px) { .pack-bar-buy { width: 100%; justify-content: space-between; } }
 
 .not-found { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; min-height: 50vh; }
 .not-found h1 { font-size: clamp(32px, 4vw, 48px); font-weight: 700; }
@@ -327,7 +317,6 @@
 @media (max-width: 599px) {
   .pick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 10px; }
   .pick .card-name { font-size: 14px; }
-  .pack-bar .btn { flex: 1; }
 }
 
 /* Lifestyle feature: vertical photo + brand statement */
@@ -389,3 +378,38 @@
 .pack-bar-buy .pack-price s { font-size: 14px; }
 .pack-page-head .save-badge { margin-bottom: 10px; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* Pack builder: selection cards with clasp dots */
+.pick-card { display: flex; flex-direction: column; }
+.pick-card .swatches { margin-top: 2px; }
+.pick-progress { font-size: 14px; color: var(--graphite); margin-top: -4px; }
+.pick .card-media img { animation: fade-in .2s ease both; }
+
+/* Bottom bar: hidden until the pack is complete, then slides up over the current scroll position */
+.pack-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 25;
+  display: grid; grid-template-columns: 1fr; gap: 10px;
+  padding: 14px var(--gutter) calc(14px + env(safe-area-inset-bottom, 0px));
+  background: var(--paper); border-top: 1px solid var(--line);
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.10);
+  transform: translateY(110%); transition: transform .35s var(--ease-drawer);
+}
+.pack-bar[data-show="true"] { transform: none; }
+@media (prefers-reduced-motion: reduce) { .pack-bar { transition: none; } }
+.pack-bar-summary { display: flex; flex-direction: column; min-width: 0; line-height: 1.3; }
+.pack-bar-summary b { font-size: 15px; }
+.pack-bar-summary span { font-size: 13px; color: var(--graphite); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pack-bar .model-picker { margin: 0; }
+.pack-bar .model-picker legend { margin-bottom: 6px; font-size: 13px; }
+.pack-bar-buy { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.pack-bar-buy .btn { flex: none; }
+/* Room at the end of the page so the last cards stay reachable above the bar */
+.pack-page[data-bar="true"] { padding-bottom: 260px; }
+@media (min-width: 900px) {
+  .pack-bar { grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; column-gap: 28px; }
+  .pack-page[data-bar="true"] { padding-bottom: 140px; }
+}
+@media (max-width: 599px) {
+  .pack-bar-buy .btn { flex: 1; min-height: 46px; padding-inline: 14px; font-size: 14px; }
+  .pack-bar-buy .pack-price b { font-size: 18px; }
+}

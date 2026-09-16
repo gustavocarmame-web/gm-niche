@@ -723,73 +723,130 @@ function ProductPage({ id }) {
 
 /* ---------- Pack page ---------- */
 
+// Pack builder card: tap the photo to add/remove the pulseira, tap a dot to pick its clasp color.
+// A dot on an unselected card also selects it while the pack still has room.
+function PickCard({ p, finish, selected, disabled, onToggle, onFinish }) {
+  const v = p.variants.find((x) => x.key === finish) ?? p.variants[0]
+  return (
+    <article className="pick-card" data-selected={selected}>
+      <button className="pick" aria-pressed={selected} disabled={disabled} onClick={onToggle}>
+        <span className="card-media">
+          <img key={v.thumb} src={v.thumb} alt="" width="600" height="600" loading="lazy" decoding="async" />
+          <span className="pick-mark" aria-hidden="true"><Check size={16} weight="bold" /></span>
+        </span>
+        <span className="card-name">{p.name}</span>
+      </button>
+      <div className="swatches" role="radiogroup" aria-label={`Cor do fecho de ${p.name}`}>
+        {p.variants.map((x) => (
+          <button
+            key={x.key}
+            type="button"
+            role="radio"
+            aria-checked={x.key === v.key}
+            aria-label={x.label}
+            title={x.label}
+            className="swatch"
+            style={{ '--swatch': FINISH_SWATCH[x.key] ?? FINISH_SWATCH.unico }}
+            onClick={() => onFinish(x.key)}
+          />
+        ))}
+      </div>
+    </article>
+  )
+}
+
 function PackPage({ id }) {
   const pk = findPack(id)
   const cart = useCart()
   const [picked, setPicked] = useState([])
+  const [finishes, setFinishes] = useState({})
   const [series, setSeries] = useState('todas')
   const [model, setModel] = useState(null)
   const [modelMissing, setModelMissing] = useState(false)
-  const pickerRef = useRef(null)
+  const [added, setAdded] = useState(false)
   useTitle(pk ? `${pk.name} | GM NICHE` : 'Pack não encontrado | GM NICHE')
+  useEffect(() => {
+    if (!added) return
+    const t = setTimeout(() => setAdded(false), 2200)
+    return () => clearTimeout(t)
+  }, [added])
   if (!pk) return <NotFound />
 
-  // Packs ship with a silver clasp, so only products sold in silver can be picked.
-  const available = products.filter((p) => p.stock > 0 && p.variants.some((v) => v.key === 'prata') && (series === 'todas' || p.series === series))
+  const save = packSavings(pk)
+  const available = products.filter((p) => p.stock > 0 && (series === 'todas' || p.series === series))
   const full = picked.length === pk.size
+  const finishOf = (pid) => finishes[pid] ?? findProduct(pid).variants[0].key
+  const finishLabel = (pid) => {
+    const prod = findProduct(pid)
+    return (prod.variants.find((v) => v.key === finishOf(pid)) ?? prod.variants[0]).label
+  }
+
   const toggle = (pid) => setPicked((cur) => (cur.includes(pid) ? cur.filter((x) => x !== pid) : cur.length < pk.size ? [...cur, pid] : cur))
-  const names = picked.map((pid) => findProduct(pid).name)
+  const chooseFinish = (pid, key) => {
+    setFinishes((cur) => ({ ...cur, [pid]: key }))
+    setPicked((cur) => (cur.includes(pid) || cur.length >= pk.size ? cur : [...cur, pid]))
+  }
 
   const addPack = () => {
-    if (!model) { setModelMissing(true); askForModel(pickerRef); return }
-    const sorted = [...picked].sort()
+    if (!model) { setModelMissing(true); return }
+    const parts = picked.map((pid) => `${pid}.${finishOf(pid)}`).sort()
+    const first = findProduct(picked[0])
     cart.add({
-      key: `pack:${pk.id}:${sorted.join('+')}:${model}`, kind: 'pack', refId: pk.id,
-      name: pk.name, detail: `${names.join(', ')}. Fecho prata, ${modelLabel(model)}.`, price: pk.price, image: findProduct(picked[0]).thumb,
+      key: `pack:${pk.id}:${parts.join('+')}:${model}`, kind: 'pack', refId: pk.id,
+      name: pk.name,
+      detail: `${picked.map((pid) => `${findProduct(pid).name} (fecho ${finishLabel(pid).toLowerCase()})`).join(', ')}. ${modelLabel(model)}.`,
+      price: pk.price,
+      image: (first.variants.find((v) => v.key === finishOf(picked[0])) ?? first.variants[0]).thumb,
       max: Math.min(...picked.map((pid) => findProduct(pid).stock)),
     })
     setPicked([])
+    setAdded(true)
   }
 
   return (
-    <article className="section pack-page">
+    <article className="section pack-page" data-bar={full}>
       <BackLink />
       <div className="pack-page-head">
-        {packSavings(pk).percent > 0 && <span className="save-badge">Economize {packSavings(pk).percent}%</span>}
+        {save.percent > 0 && <span className="save-badge">Economize {save.percent}%</span>}
         <h1>{pk.name}</h1>
-        <p>{pk.copy} Escolha {pk.size} modelos diferentes. Os packs saem com fecho prata.</p>
+        <p>{pk.copy} Escolha {pk.size} modelos diferentes e a cor do fecho de cada um.</p>
       </div>
-      <ModelPicker name="modelo-pack" value={model} missing={modelMissing && !model} pickerRef={pickerRef} onChange={(m) => { setModel(m); setModelMissing(false) }} />
-      <div className="filters" role="group" aria-label="Filtrar por série">
+      <div className="filters" role="group" aria-label="Filtrar produtos">
         {FILTERS.map(([key, label]) => (
           <button key={key} className={series === key ? 'active' : ''} aria-pressed={series === key} onClick={() => setSeries(key)}>{label}</button>
         ))}
       </div>
+      <p className="pick-progress" aria-live="polite">
+        {added ? 'Pack adicionado ao carrinho. Monte outro se quiser.' : `${picked.length} de ${pk.size} escolhidos`}
+      </p>
       <ul className="pick-grid">
         {available.map((p) => {
           const on = picked.includes(p.id)
           return (
             <li key={p.id}>
-              <button className="pick" aria-pressed={on} disabled={!on && full} onClick={() => toggle(p.id)}>
-                <span className="card-media">
-                  <img src={p.thumb} alt="" width="600" height="600" loading="lazy" />
-                  <span className="pick-mark" aria-hidden="true"><Check size={16} weight="bold" /></span>
-                </span>
-                <span className="card-name">{p.name}</span>
-                <span className="card-price">{p.series}</span>
-              </button>
+              <PickCard
+                p={p}
+                finish={finishOf(p.id)}
+                selected={on}
+                disabled={!on && full}
+                onToggle={() => toggle(p.id)}
+                onFinish={(key) => chooseFinish(p.id, key)}
+              />
             </li>
           )
         })}
       </ul>
-      <div className="pack-bar">
-        <div>
-          <b>{picked.length} de {pk.size} escolhidos</b>
-          <span>{names.length ? names.join(', ') : 'Nenhum modelo escolhido'}</span>
+
+      {/* Fixed to the bottom of the screen; slides up only once the pack is complete. */}
+      <div className="pack-bar" data-show={full} inert={!full} aria-hidden={!full} role="region" aria-label="Finalizar pack">
+        <div className="pack-bar-summary">
+          <b>Pack completo</b>
+          <span>{picked.map((pid) => `${findProduct(pid).name} (${finishLabel(pid).toLowerCase()})`).join(', ')}</span>
         </div>
+        <ModelPicker name="modelo-pack" value={model} missing={modelMissing && !model} onChange={(m) => { setModel(m); setModelMissing(false) }} />
         <div className="pack-bar-buy">
-          <PackPrice pk={pk} save={packSavings(pk)} />
-          <button className="btn solid" disabled={!full} onClick={addPack}>Adicionar ao carrinho</button>
+          <PackPrice pk={pk} save={save} />
+          <button className="btn solid" onClick={addPack}>Adicionar</button>
         </div>
       </div>
     </article>

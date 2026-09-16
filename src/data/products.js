@@ -25,12 +25,16 @@ const HIDDEN_FINISHES = {
   'you-are-your-only-limit': ['prata'],
 }
 
+const displayName = (name) => name.replace(/FUCK/gi, 'F*CK')
+
 export const products = catalog.map((p) => {
   const hidden = HIDDEN_FINISHES[p.id] ?? []
   const shown = p.variants.filter((v) => !hidden.includes(v.key))
   const variants = shown.length ? shown : p.variants
   return {
     ...p,
+    // Nomes vêm das pastas; palavras censuradas são trocadas só no que o site mostra.
+    name: displayName(p.name),
     variants,
     thumb: variants[0].thumb,
     // The ROLEX DIAMANTE folder (one product per photo) is its own series.

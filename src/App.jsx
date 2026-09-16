@@ -417,7 +417,7 @@ function Featured() {
         <Link to="/colecao" className="btn solid">Descubra seu estilo</Link>
       </div>
       <div className="feature-media">
-        <img src="/lifestyle.webp" alt="Pulseira FUCK 9-5 no pulso, em uma mesa à beira-mar ao pôr do sol" width="1122" height="1402" loading="lazy" decoding="async" />
+        <img src="/lifestyle.webp" alt="Pulseira F*CK 9-5 no pulso, em uma mesa à beira-mar ao pôr do sol" width="1122" height="1402" loading="lazy" decoding="async" />
       </div>
     </section>
   )

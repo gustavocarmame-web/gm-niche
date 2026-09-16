@@ -66,7 +66,7 @@ function Header() {
   const cart = useCart()
   const links = [
     ['/#mais-vendidos', 'Mais vendidos'],
-    ['/colecao', 'Coleção'],
+    ['/colecao', 'Produtos'],
     ['/#destaque', 'Destaque'],
     ['/#packs', 'Packs'],
     ['/#duvidas', 'Dúvidas'],
@@ -120,7 +120,7 @@ function CartDrawer() {
       {cart.items.length === 0 ? (
         <div className="cart-empty">
           <p>Seu carrinho está vazio.</p>
-          <Link to="/colecao" className="btn" onClick={close}>Ver a coleção</Link>
+          <Link to="/colecao" className="btn" onClick={close}>Ver os produtos</Link>
         </div>
       ) : (
         <>
@@ -233,7 +233,7 @@ function Hero() {
       <div className="hero-copy">
         <h1>Sua WHOOP, do seu jeito.</h1>
         <p>Pulseiras em edição limitada para {COMPATIBILITY}</p>
-        <Link to="/colecao" className="btn solid">Ver a coleção</Link>
+        <Link to="/colecao" className="btn solid">Ver os produtos</Link>
       </div>
     </section>
   )
@@ -349,7 +349,7 @@ const FILTERS = [['todas', 'Todas'], ...SERIES.map((s) => [s, s])]
 function CollectionPreview() {
   return (
     <section className="section collection collection-preview" id="colecao">
-      <h2 className="section-title">Coleção</h2>
+      <h2 className="section-title">Produtos</h2>
       <ul className="product-grid">
         {products.slice(0, 8).map((p) => <li key={p.id}><ProductCard p={p} /></li>)}
       </ul>
@@ -366,7 +366,7 @@ function CollectionPage() {
     const wanted = new URLSearchParams(window.location.search).get('serie')
     return SERIES.includes(wanted) ? wanted : 'todas'
   })
-  useTitle(filter === 'todas' ? 'Coleção | GM NICHE' : `${filter} | GM NICHE`)
+  useTitle(filter === 'todas' ? 'Produtos | GM NICHE' : `${filter} | GM NICHE`)
   const setFilter = (key) => {
     setFilterState(key)
     const url = new URL(window.location.href)
@@ -379,9 +379,9 @@ function CollectionPage() {
   return (
     <section className="section collection collection-page">
       <BackLink to="/" label="Início" />
-      <h1 className="section-title">Coleção</h1>
+      <h1 className="section-title">Produtos</h1>
       <div className="collection-bar">
-        <div className="filters" role="group" aria-label="Filtrar por coleção">
+        <div className="filters" role="group" aria-label="Filtrar produtos">
           {FILTERS.map(([key, label]) => (
             <button key={key} className={filter === key ? 'active' : ''} aria-pressed={filter === key} onClick={() => setFilter(key)}>{label}</button>
           ))}
@@ -501,7 +501,7 @@ function HomePage() {
 
 /* ---------- Product page ---------- */
 
-function BackLink({ to = '/colecao', label = 'Coleção' }) {
+function BackLink({ to = '/colecao', label = 'Produtos' }) {
   return (
     <Link to={to} className="back-link">
       <ArrowLeft size={18} aria-hidden /> {label}
@@ -784,7 +784,7 @@ function NotFound() {
     <section className="section not-found">
       <h1>Página não encontrada</h1>
       <p>Esse endereço não existe ou o modelo saiu da loja.</p>
-      <Link to="/colecao" className="btn">Ver a coleção</Link>
+      <Link to="/colecao" className="btn">Ver os produtos</Link>
     </section>
   )
 }
@@ -801,7 +801,7 @@ function Footer() {
         </div>
         <div>
           <h3>Loja</h3>
-          <Link to="/colecao">Coleção</Link>
+          <Link to="/colecao">Produtos</Link>
           <Link to="/#destaque">Destaque</Link>
           <Link to="/#packs">Packs</Link>
         </div>

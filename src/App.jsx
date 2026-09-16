@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, CaretLeft, CaretRight, Check, Handbag, List, Minus, Plus, Trash, X } from '@phosphor-icons/react'
-import { products, packs, faqs, formatPrice, findProduct, findPack, CHECKOUT_URL, SERIES, COMPATIBILITY, FINISH_SWATCH, BEST_SELLER_IDS, SERIES_COVER, WHOOP_MODELS, packSavings } from './data/products.js'
+import { products, packs, faqs, formatPrice, findProduct, findPack, whatsappOrderLink, SERIES, COMPATIBILITY, FINISH_SWATCH, BEST_SELLER_IDS, SERIES_COVER, WHOOP_MODELS, packSavings } from './data/products.js'
 import { Link, useRoute, useTitle } from './router.jsx'
 import { CartProvider, useCart } from './cart.jsx'
 
@@ -82,7 +82,6 @@ function Stepper({ value, min = 1, max, onChange, label }) {
 function CartDrawer() {
   const cart = useCart()
   const close = () => cart.setOpen(false)
-  const canCheckout = cart.count > 0 && CHECKOUT_URL
   return (
     <Sheet open={cart.open} onClose={close} side="right" label="Carrinho">
       <div className="cart-head">
@@ -118,12 +117,10 @@ function CartDrawer() {
           </ul>
           <div className="cart-foot">
             <div className="cart-total"><span>Subtotal</span><b>{formatPrice(cart.subtotal)}</b></div>
-            <p>{CHECKOUT_URL ? 'Frete calculado na finalização.' : 'O pagamento on-line ainda não está disponível. Seus itens ficam salvos neste carrinho.'}</p>
-            {canCheckout ? (
-              <a className="btn solid wide" href={CHECKOUT_URL}>Finalizar compra</a>
-            ) : (
-              <button className="btn solid wide" disabled>Finalizar compra</button>
-            )}
+            <p>O resumo do pedido vai para o nosso WhatsApp, onde combinamos o frete e o pagamento.</p>
+            <a className="btn solid wide" href={whatsappOrderLink(cart.items, cart.subtotal)} target="_blank" rel="noopener noreferrer">
+              Finalizar compra
+            </a>
           </div>
         </>
       )}

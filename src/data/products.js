@@ -1,6 +1,5 @@
-// Link da finalização de compra (Mercado Pago, Stripe, Shopify...).
-// Enquanto estiver vazio, o carrinho funciona, mas o botão de finalizar fica desativado.
-export const CHECKOUT_URL = ''
+// WhatsApp que recebe os pedidos: DDI 55 + DDD + número, só dígitos.
+export const WHATSAPP_NUMBER = '5562996111870'
 
 import catalog from './catalog.json'
 
@@ -124,13 +123,38 @@ export const faqs = [
   },
   {
     q: 'Como funciona o pagamento?',
-    a: 'Adicione as pulseiras ao carrinho e finalize a compra. O pagamento é por Pix ou cartão.',
+    a: 'Adicione as pulseiras ao carrinho e toque em Finalizar compra. O resumo do pedido vai para o nosso WhatsApp, onde combinamos o frete e o pagamento por Pix ou cartão.',
   },
   {
     q: 'Quanto tempo demora para chegar?',
     a: 'Postamos em até 2 dias úteis depois do pagamento e enviamos o código de rastreio.',
   },
 ]
+
+// Resumo do pedido enviado ao WhatsApp ao tocar em "Finalizar compra".
+// *texto* fica em negrito no WhatsApp.
+export function orderMessage(items, subtotal) {
+  const pieces = items.reduce((n, i) => n + i.qty, 0)
+  const lines = items.map((item, index) => [
+    `${index + 1}) *${item.name}*`,
+    `   ${item.detail}`,
+    `   Quantidade: ${item.qty} x ${formatPrice(item.price)} = ${formatPrice(item.qty * item.price)}`,
+  ].join('\n'))
+  return [
+    '*Novo pedido GM NICHE*',
+    '',
+    ...lines.flatMap((l) => [l, '']),
+    `Itens: ${pieces}`,
+    `*Total dos produtos: ${formatPrice(subtotal)}*`,
+    'Frete: a combinar',
+    '',
+    'Gostaria de confirmar este pedido e combinar o frete e o pagamento.',
+  ].join('\n')
+}
+
+export function whatsappOrderLink(items, subtotal) {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(orderMessage(items, subtotal))}`
+}
 
 const brl = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })
 export function formatPrice(value) {

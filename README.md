@@ -21,7 +21,7 @@ Os arquivos ficam na pasta `dist/`. Suba essa pasta na Vercel, Netlify ou qualqu
 
 ## O que trocar antes de publicar
 
-- **Pagamento**: `src/data/products.js`, constante `CHECKOUT_URL`. Enquanto estiver vazia, o botão de finalizar compra fica desativado.
+- **Finalizar compra**: abre o WhatsApp com o resumo do pedido. Número em `WHATSAPP_NUMBER` e texto da mensagem em `orderMessage`, ambos em `src/data/products.js`.
 - **Packs**: lista `packs` em `src/data/products.js`.
 - **Dúvidas frequentes**: lista `faqs` no mesmo arquivo.
 - **Produtos e fotos**: coloque as fotos em uma pasta por produto e rode `node scripts/import-products.mjs "C:\caminho\FOTOS WHOOP"`. O nome da pasta vira o nome do produto. O nome de cada foto define o acabamento do fecho (PRATA, PRATA FOSCO, PRETO, FOSCO, DOURADO); fotos com IMG 2, IMG 3 entram na galeria do mesmo acabamento. O script gera `public/products/` e `src/data/catalog.json`.

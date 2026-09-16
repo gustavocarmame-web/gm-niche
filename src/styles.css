@@ -35,7 +35,7 @@ h1, h2, h3, p { margin: 0; }
 img { display: block; max-width: 100%; height: auto; }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 ::selection { background: var(--gold); color: var(--ink); }
-.footer :focus-visible, .categories :focus-visible, .pack.dark :focus-visible, .announce :focus-visible { outline-color: var(--paper); }
+.footer :focus-visible, .categories :focus-visible, .pack.dark :focus-visible { outline-color: var(--paper); }
 a, button, summary { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .skip-link { position: absolute; left: 16px; top: -100px; z-index: 100; padding: 12px 18px; background: var(--paper); color: var(--ink); border: 2px solid var(--ink); border-radius: var(--radius-sm); }
 .skip-link:focus { top: 12px; }
@@ -68,16 +68,6 @@ a, button, summary { touch-action: manipulation; -webkit-tap-highlight-color: tr
 .icon-btn { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; }
 .icon-btn svg { width: 24px; height: 24px; }
 
-/* Announcement bar */
-.announce {
-  display: grid; grid-template-columns: 44px 1fr 44px; align-items: center;
-  min-height: 44px; padding: 0 var(--gutter);
-  background: var(--ink); color: var(--paper);
-}
-.announce p { text-align: center; font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; }
-.announce button { display: grid; place-items: center; height: 44px; }
-@media (max-width: 600px) { .announce p { font-size: 12px; letter-spacing: 0.04em; } }
-
 /* Header */
 .header {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30;
@@ -94,7 +84,7 @@ a, button, summary { touch-action: manipulation; -webkit-tap-highlight-color: tr
 .hero {
   --hero-bg: #e8e7e8;
   position: relative; overflow: hidden;
-  min-height: min(760px, calc(100svh - 104px));
+  min-height: min(760px, calc(100svh - 60px));
   display: flex; align-items: center;
   padding: 64px var(--gutter);
   background: var(--hero-bg);
@@ -112,7 +102,7 @@ a, button, summary { touch-action: manipulation; -webkit-tap-highlight-color: tr
 @keyframes rise { from { opacity: 0; transform: translateY(16px); } }
 @media (prefers-reduced-motion: reduce) { .hero-copy > * { animation: none; } }
 @media (max-width: 800px) {
-  .hero { align-items: flex-end; min-height: calc(100svh - 104px); padding-bottom: 40px; }
+  .hero { align-items: flex-end; min-height: calc(100svh - 60px); padding-bottom: 40px; }
   .hero-stage { inset: 0 0 34% 0; }
 }
 

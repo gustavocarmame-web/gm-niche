@@ -6,34 +6,6 @@ import { CartProvider, useCart } from './cart.jsx'
 
 const ICON = { size: 22, weight: 'regular', 'aria-hidden': true }
 
-const ANNOUNCEMENTS = [
-  'Envio para todo o Brasil',
-  'Pagamento por Pix ou cartão',
-  'Postagem em até 2 dias úteis',
-]
-
-function AnnouncementBar() {
-  const [i, setI] = useState(0)
-  const [paused, setPaused] = useState(false)
-  const n = ANNOUNCEMENTS.length
-  useEffect(() => {
-    if (paused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const t = setInterval(() => setI((v) => (v + 1) % n), 5000)
-    return () => clearInterval(t)
-  }, [n, paused])
-  return (
-    <div
-      className="announce" role="region" aria-label="Avisos da loja"
-      onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
-      onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}
-    >
-      <button onClick={() => setI((i - 1 + n) % n)} aria-label="Aviso anterior"><CaretLeft size={18} aria-hidden /></button>
-      <p aria-live="polite">{ANNOUNCEMENTS[i]}</p>
-      <button onClick={() => setI((i + 1) % n)} aria-label="Próximo aviso"><CaretRight size={18} aria-hidden /></button>
-    </div>
-  )
-}
-
 // Side sheet shared by the menu and the cart: Escape closes, focus moves in and back out.
 function Sheet({ open, onClose, side, label, children }) {
   const panel = useRef(null)
@@ -917,7 +889,6 @@ export default function App() {
   return (
     <CartProvider>
       <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
-      <AnnouncementBar />
       <Header />
       <Routes />
       <Footer />

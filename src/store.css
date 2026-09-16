@@ -251,7 +251,7 @@
 
 /* Hero on phones: video on top, copy below, CTA reachable */
 @media (max-width: 799px) {
-  .hero { min-height: calc(100svh - 104px); padding: 0 var(--gutter) 28px; }
+  .hero { min-height: calc(100svh - 60px); padding: 0 var(--gutter) 28px; }
   .hero-stage { inset: 0 0 42% 0; }
   .hero h1 { font-size: clamp(34px, 10vw, 44px); }
   .hero p { font-size: 13px; }

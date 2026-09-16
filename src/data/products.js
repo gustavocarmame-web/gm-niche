@@ -97,6 +97,14 @@ export const packs = [
   },
 ]
 
+// Economia do pack em relação a comprar as pulseiras separadas. Arredonda para baixo
+// para nunca anunciar um desconto maior que o real.
+export function packSavings(pk) {
+  const full = pk.size * DEFAULT_PRICE
+  const amount = Math.max(0, full - pk.price)
+  return { full, amount, percent: full ? Math.floor((amount / full) * 100) : 0 }
+}
+
 export const findProduct = (id) => products.find((p) => p.id === id)
 export const productImage = (id) => findProduct(id)?.thumb
 export const findPack = (id) => packs.find((p) => p.id === id)

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, CaretLeft, CaretRight, Check, Handbag, List, Minus, Plus, Trash, X } from '@phosphor-icons/react'
-import { products, packs, faqs, formatPrice, findProduct, findPack, CHECKOUT_URL, SERIES, COMPATIBILITY, FINISH_SWATCH, BEST_SELLER_IDS, SERIES_COVER, WHOOP_MODELS } from './data/products.js'
+import { products, packs, faqs, formatPrice, findProduct, findPack, CHECKOUT_URL, SERIES, COMPATIBILITY, FINISH_SWATCH, BEST_SELLER_IDS, SERIES_COVER, WHOOP_MODELS, packSavings } from './data/products.js'
 import { Link, useRoute, useTitle } from './router.jsx'
 import { CartProvider, useCart } from './cart.jsx'
 
@@ -445,23 +445,39 @@ function Categories() {
   )
 }
 
+// Pack price with the separate-purchase total struck through, for screen readers read as a sentence.
+function PackPrice({ pk, save }) {
+  if (save.amount <= 0) return <b className="pack-price">{formatPrice(pk.price)}</b>
+  return (
+    <span className="pack-price">
+      <s aria-hidden="true">{formatPrice(save.full)}</s>
+      <b>{formatPrice(pk.price)}</b>
+      <span className="visually-hidden">{`De ${formatPrice(save.full)} por ${formatPrice(pk.price)}, economia de ${formatPrice(save.amount)}`}</span>
+    </span>
+  )
+}
+
 function Packs() {
   return (
     <section className="section" id="packs">
       <h2 className="section-title">Packs</h2>
       <div className="packs">
-        {packs.map((pk) => (
+        {packs.map((pk) => {
+          const save = packSavings(pk)
+          return (
           <div key={pk.id} className={`pack ${pk.dark ? 'dark' : ''}`}>
             <div>
+              {save.percent > 0 && <span className="save-badge">Economize {save.percent}%</span>}
               <h3>{pk.name}</h3>
               <p>{pk.copy}</p>
             </div>
             <div className="pack-foot">
-              <b>{formatPrice(pk.price)}</b>
+              <PackPrice pk={pk} save={save} />
               <Link to={`/pack/${pk.id}`} className={`btn ${pk.dark ? 'light' : ''}`}>Montar o pack</Link>
             </div>
           </div>
-        ))}
+          )
+        })}
       </div>
     </section>
   )
@@ -739,6 +755,7 @@ function PackPage({ id }) {
     <article className="section pack-page">
       <BackLink />
       <div className="pack-page-head">
+        {packSavings(pk).percent > 0 && <span className="save-badge">Economize {packSavings(pk).percent}%</span>}
         <h1>{pk.name}</h1>
         <p>{pk.copy} Escolha {pk.size} modelos diferentes. Os packs saem com fecho prata.</p>
       </div>
@@ -771,7 +788,7 @@ function PackPage({ id }) {
           <span>{names.length ? names.join(', ') : 'Nenhum modelo escolhido'}</span>
         </div>
         <div className="pack-bar-buy">
-          <b>{formatPrice(pk.price)}</b>
+          <PackPrice pk={pk} save={packSavings(pk)} />
           <button className="btn solid" disabled={!full} onClick={addPack}>Adicionar ao carrinho</button>
         </div>
       </div>

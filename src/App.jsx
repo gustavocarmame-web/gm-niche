@@ -1,26 +1,15 @@
-import { Suspense, lazy, useEffect, useRef, useState } from 'react'
-import { products, packs, faqs, formatPrice, whatsappLink, productImage } from './data/products.js'
+import { useEffect, useRef, useState } from 'react'
+import { ArrowLeft, CaretLeft, CaretRight, Check, Handbag, List, Minus, Plus, Trash, X } from '@phosphor-icons/react'
+import { products, packs, faqs, formatPrice, findProduct, findPack, CHECKOUT_URL, SERIES, COMPATIBILITY, FINISH_SWATCH, BEST_SELLER_IDS, SERIES_COVER } from './data/products.js'
+import { Link, useRoute, useTitle } from './router.jsx'
+import { CartProvider, useCart } from './cart.jsx'
 
-// three.js is heavy: load it only when a 3D view is on screen.
-const Band3D = lazy(() => import('./components/Band3D.jsx'))
-
-const WA_ICON = (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M21 12a9 9 0 0 1-13.3 7.9L3 21l1.2-4.5A9 9 0 1 1 21 12z" />
-    <path d="M9 10.5c.4 1.6 1.9 3.2 3.6 3.7l1.4-1.2 2 1c-.4 1.3-1.5 1.9-2.7 1.7-2.8-.5-5.4-3.2-5.9-6-.2-1.2.4-2.3 1.7-2.7l1 2z" />
-  </svg>
-)
-
-const Chevron = ({ dir = 'right' }) => (
-  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ transform: dir === 'left' ? 'rotate(180deg)' : undefined }}>
-    <path d="m9 6 6 6-6 6" />
-  </svg>
-)
+const ICON = { size: 22, weight: 'regular', 'aria-hidden': true }
 
 const ANNOUNCEMENTS = [
-  'Pedido direto pelo WhatsApp',
   'Envio para todo o Brasil',
   'Pagamento por Pix ou cartão',
+  'Postagem em até 2 dias úteis',
 ]
 
 function AnnouncementBar() {
@@ -38,144 +27,363 @@ function AnnouncementBar() {
       onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}
     >
-      <button onClick={() => setI((i - 1 + n) % n)} aria-label="Aviso anterior"><Chevron dir="left" /></button>
+      <button onClick={() => setI((i - 1 + n) % n)} aria-label="Aviso anterior"><CaretLeft size={18} aria-hidden /></button>
       <p aria-live="polite">{ANNOUNCEMENTS[i]}</p>
-      <button onClick={() => setI((i + 1) % n)} aria-label="Próximo aviso"><Chevron /></button>
+      <button onClick={() => setI((i + 1) % n)} aria-label="Próximo aviso"><CaretRight size={18} aria-hidden /></button>
+    </div>
+  )
+}
+
+// Side sheet shared by the menu and the cart: Escape closes, focus moves in and back out.
+function Sheet({ open, onClose, side, label, children }) {
+  const panel = useRef(null)
+  const returnTo = useRef(null)
+  useEffect(() => {
+    if (!open) return
+    returnTo.current = document.activeElement
+    panel.current?.querySelector('button, a')?.focus()
+    const onKey = (e) => e.key === 'Escape' && onClose()
+    document.addEventListener('keydown', onKey)
+    document.documentElement.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.documentElement.style.overflow = ''
+      returnTo.current?.focus?.()
+    }
+  }, [open, onClose])
+  return (
+    <div className={`sheet sheet-${side}`} data-open={open} aria-hidden={!open} inert={!open}>
+      <div className="sheet-scrim" onClick={onClose} />
+      <div className="sheet-panel" ref={panel} role="dialog" aria-modal="true" aria-label={label}>
+        {children}
+      </div>
     </div>
   )
 }
 
 function Header() {
-  const [open, setOpen] = useState(false)
-  useEffect(() => {
-    if (!open) return
-    const onKey = (e) => e.key === 'Escape' && setOpen(false)
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [open])
+  const [menu, setMenu] = useState(false)
+  const cart = useCart()
   const links = [
-    ['#colecao', 'Coleção'],
-    ['#edicao-limitada', 'Edição limitada'],
-    ['#packs', 'Packs'],
-    ['#duvidas', 'Dúvidas'],
+    ['/#mais-vendidos', 'Mais vendidos'],
+    ['/colecao', 'Coleção'],
+    ['/#destaque', 'Destaque'],
+    ['/#packs', 'Packs'],
+    ['/#duvidas', 'Dúvidas'],
   ]
   return (
     <>
       <header className="header">
-        <button className="icon-btn" onClick={() => setOpen(true)} aria-label="Abrir menu" aria-expanded={open}>
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16" /></svg>
+        <button className="icon-btn" onClick={() => setMenu(true)} aria-label="Abrir menu" aria-expanded={menu}>
+          <List {...ICON} />
         </button>
-        <a href="#top" className="logo-link" aria-label="GM NICHE, início"><img className="logo" src="/logo.png" width="1200" height="145" alt="" /></a>
-        <a className="icon-btn" href={whatsappLink('Olá! Quero saber mais sobre as bandas GM NICHE.')} target="_blank" rel="noreferrer" aria-label="Falar no WhatsApp">
-          {WA_ICON}
-        </a>
+        <Link to="/" className="logo-link" aria-label="GM NICHE, início">
+          <img className="logo" src="/logo.png" width="1200" height="145" alt="" />
+        </Link>
+        <button className="icon-btn cart-btn" onClick={() => cart.setOpen(true)} aria-label={`Abrir carrinho, ${cart.count} ${cart.count === 1 ? 'item' : 'itens'}`}>
+          <Handbag {...ICON} />
+          {cart.count > 0 && <span className="cart-count" aria-hidden="true">{cart.count}</span>}
+        </button>
       </header>
-      <div className={`drawer ${open ? 'open' : ''}`} aria-hidden={!open} inert={!open}>
-        <div className="drawer-scrim" onClick={() => setOpen(false)} />
-        <nav className="drawer-panel" aria-label="Menu principal">
-          <button className="icon-btn drawer-close" onClick={() => setOpen(false)} aria-label="Fechar menu">
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
-          </button>
-          {links.map(([href, label]) => (
-            <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a>
+      <Sheet open={menu} onClose={() => setMenu(false)} side="left" label="Menu principal">
+        <button className="icon-btn sheet-close" onClick={() => setMenu(false)} aria-label="Fechar menu"><X {...ICON} /></button>
+        <nav className="menu-links">
+          {links.map(([to, label]) => (
+            <Link key={to} to={to} onClick={() => setMenu(false)}>{label}</Link>
           ))}
-          <a className="btn solid" href={whatsappLink('Olá! Quero saber mais sobre as bandas GM NICHE.')} target="_blank" rel="noreferrer">
-            {WA_ICON}<span>Pedir no WhatsApp</span>
-          </a>
         </nav>
-      </div>
+      </Sheet>
     </>
+  )
+}
+
+function Stepper({ value, min = 1, max, onChange, label }) {
+  return (
+    <div className="stepper" role="group" aria-label={label}>
+      <button onClick={() => onChange(value - 1)} disabled={value <= min} aria-label="Diminuir quantidade"><Minus size={16} aria-hidden /></button>
+      <output aria-live="polite">{value}</output>
+      <button onClick={() => onChange(value + 1)} disabled={value >= max} aria-label="Aumentar quantidade"><Plus size={16} aria-hidden /></button>
+    </div>
+  )
+}
+
+function CartDrawer() {
+  const cart = useCart()
+  const close = () => cart.setOpen(false)
+  const canCheckout = cart.count > 0 && CHECKOUT_URL
+  return (
+    <Sheet open={cart.open} onClose={close} side="right" label="Carrinho">
+      <div className="cart-head">
+        <h2>Carrinho{cart.count > 0 && <span> ({cart.count})</span>}</h2>
+        <button className="icon-btn" onClick={close} aria-label="Fechar carrinho"><X {...ICON} /></button>
+      </div>
+      {cart.items.length === 0 ? (
+        <div className="cart-empty">
+          <p>Seu carrinho está vazio.</p>
+          <Link to="/colecao" className="btn" onClick={close}>Ver a coleção</Link>
+        </div>
+      ) : (
+        <>
+          <ul className="cart-lines">
+            {cart.items.map((line) => (
+              <li key={line.key}>
+                <img src={line.image} alt="" width="900" height="900" />
+                <div className="cart-line-body">
+                  <div className="cart-line-top">
+                    <b>{line.name}</b>
+                    <span>{formatPrice(line.price * line.qty)}</span>
+                  </div>
+                  <p>{line.detail}</p>
+                  <div className="cart-line-actions">
+                    <Stepper value={line.qty} min={1} max={line.max} onChange={(q) => cart.setQty(line.key, q)} label={`Quantidade de ${line.name}`} />
+                    <button className="text-btn" onClick={() => cart.remove(line.key)}>
+                      <Trash size={16} aria-hidden /> Remover
+                    </button>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <div className="cart-foot">
+            <div className="cart-total"><span>Subtotal</span><b>{formatPrice(cart.subtotal)}</b></div>
+            <p>{CHECKOUT_URL ? 'Frete calculado na finalização.' : 'O pagamento on-line ainda não está disponível. Seus itens ficam salvos neste carrinho.'}</p>
+            {canCheckout ? (
+              <a className="btn solid wide" href={CHECKOUT_URL}>Finalizar compra</a>
+            ) : (
+              <button className="btn solid wide" disabled>Finalizar compra</button>
+            )}
+          </div>
+        </>
+      )}
+    </Sheet>
+  )
+}
+
+/* ---------- Home ---------- */
+
+// Transparent boomerang loop (forward + reversed, VP9 with alpha, no audio track).
+// Browsers that play VP9 but drop the alpha channel (Safari) would paint a black box,
+// so the first decoded frame is checked and those browsers get the transparent still instead.
+function supportsTransparentVideo(v) {
+  try {
+    const c = document.createElement('canvas')
+    c.width = 8
+    c.height = 8
+    const ctx = c.getContext('2d', { willReadFrequently: true })
+    ctx.drawImage(v, 0, 0, 8, 8)
+    return ctx.getImageData(0, 0, 1, 1).data[3] < 250
+  } catch {
+    return false
+  }
+}
+
+function HeroVideo() {
+  const video = useRef(null)
+  const [still, setStill] = useState(false)
+
+  useEffect(() => {
+    const v = video.current
+    if (!v) return
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const sync = () => {
+      if (reduce.matches) { v.pause(); v.currentTime = 0 }
+      else v.play().catch(() => {})
+    }
+    const check = () => { if (!supportsTransparentVideo(v)) setStill(true) }
+    const fail = () => setStill(true)
+    if (v.readyState >= 2) check()
+    else v.addEventListener('loadeddata', check, { once: true })
+    v.addEventListener('error', fail, { once: true })
+    sync()
+    reduce.addEventListener('change', sync)
+    return () => {
+      v.removeEventListener('loadeddata', check)
+      v.removeEventListener('error', fail)
+      reduce.removeEventListener('change', sync)
+    }
+  }, [])
+
+  if (still) {
+    return <img className="hero-video" src="/video/hero-poster.webp" width="720" height="960" alt="" />
+  }
+  return (
+    <video
+      ref={video}
+      className="hero-video"
+      src="/video/hero-loop.webm"
+      width="720"
+      height="960"
+      muted
+      loop
+      playsInline
+      preload="auto"
+      disablePictureInPicture
+      aria-hidden="true"
+      tabIndex={-1}
+    />
   )
 }
 
 function Hero() {
   return (
     <section className="hero" id="top">
-      <div className="hero-stage" aria-hidden="true">
-        <Suspense fallback={<img className="hero-fallback" src={productImage('fairway')} alt="" />}>
-          <Band3D className="stage-canvas" color="#E8E5DE" clasp="#C9C5BE" sway={0.4} distance={4.4} shadow={false} />
-        </Suspense>
+      <div className="hero-stage">
+        <HeroVideo />
       </div>
       <div className="hero-copy">
         <h1>Sua WHOOP, do seu jeito.</h1>
-        <p>Bandas em edição limitada para WHOOP 4.0 e MG</p>
-        <a className="btn light-solid" href="#colecao">Ver a coleção</a>
+        <p>Bandas em edição limitada para {COMPATIBILITY}</p>
+        <Link to="/colecao" className="btn solid">Ver a coleção</Link>
       </div>
     </section>
   )
 }
 
-const FILTERS = [
-  ['todas', 'Todas'],
-  ['classicas', 'Clássicas'],
-  ['limitadas', 'Edição limitada'],
-]
+// Product card: photo + name + price, then one dot per clasp finish. Tapping a dot swaps
+// the photo in place; the link carries the chosen finish into the product page.
+function ProductCard({ p, eager = false }) {
+  const [key, setKey] = useState(p.variants[0].key)
+  const v = p.variants.find((x) => x.key === key) ?? p.variants[0]
+  const href = p.variants.length > 1 ? `/produto/${p.id}?acabamento=${v.key}` : `/produto/${p.id}`
+  return (
+    <article className="card">
+      <Link to={href} className="card-link">
+        <span className="card-media">
+          <img key={v.thumb} src={v.thumb} alt={`${p.name}, fecho ${v.label.toLowerCase()}`} width="600" height="600" loading={eager ? 'eager' : 'lazy'} decoding="async" />
+          {p.stock === 0 && <span className="badge">Esgotado</span>}
+        </span>
+        <span className="card-name">{p.name}</span>
+        <span className="card-price">{formatPrice(p.price)}</span>
+      </Link>
+      <div className="swatches" role="radiogroup" aria-label={`Cor do fecho de ${p.name}`}>
+        {p.variants.map((x) => (
+          <button
+            key={x.key}
+            type="button"
+            role="radio"
+            aria-checked={x.key === v.key}
+            aria-label={x.label}
+            title={x.label}
+            className="swatch"
+            style={{ '--swatch': FINISH_SWATCH[x.key] ?? FINISH_SWATCH.unico }}
+            onClick={() => setKey(x.key)}
+            // Warm the image cache so the swap is instant on tap.
+            onPointerEnter={() => { const i = new Image(); i.src = x.thumb }}
+          />
+        ))}
+      </div>
+    </article>
+  )
+}
 
-function Collection({ filter, setFilter, onOpen }) {
+const BEST_SELLERS = BEST_SELLER_IDS.map(findProduct).filter(Boolean)
+
+// One product per view on phones, several on desktop. Manual only: swipe or arrows, no autoplay.
+function BestSellers() {
   const track = useRef(null)
-  const [page, setPage] = useState(1)
-  const list = products.filter((p) => filter === 'todas' || (filter === 'limitadas' ? p.limited : !p.limited))
-
-  const pages = () => {
-    const el = track.current
-    if (!el) return 1
-    return Math.max(1, Math.ceil(el.scrollWidth / el.clientWidth - 0.05))
-  }
-  const [total, setTotal] = useState(1)
+  const [index, setIndex] = useState(0)
+  const [perView, setPerView] = useState(1)
+  const count = BEST_SELLERS.length
 
   useEffect(() => {
     const el = track.current
     if (!el) return
-    el.scrollTo({ left: 0 })
+    const step = () => {
+      const first = el.children[0]
+      if (!first) return 0
+      return first.getBoundingClientRect().width + parseFloat(getComputedStyle(el).columnGap || 0)
+    }
     const update = () => {
-      setTotal(pages())
-      setPage(Math.min(pages(), Math.round(el.scrollLeft / el.clientWidth) + 1))
+      const s = step()
+      if (!s) return
+      setIndex(Math.min(count - 1, Math.round(el.scrollLeft / s)))
+      setPerView(Math.max(1, Math.round(el.clientWidth / s)))
     }
     update()
     el.addEventListener('scroll', update, { passive: true })
-    window.addEventListener('resize', update)
-    return () => { el.removeEventListener('scroll', update); window.removeEventListener('resize', update) }
-  }, [filter])
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    return () => { el.removeEventListener('scroll', update); ro.disconnect() }
+  }, [count])
 
+  const lastStart = Math.max(0, count - perView)
   const go = (dir) => {
     const el = track.current
-    el.scrollBy({ left: dir * el.clientWidth, behavior: 'smooth' })
+    const first = el.children[0]
+    const s = first.getBoundingClientRect().width + parseFloat(getComputedStyle(el).columnGap || 0)
+    el.scrollTo({ left: Math.max(0, Math.min(lastStart, index + dir)) * s, behavior: 'smooth' })
   }
 
+  if (count === 0) return null
   return (
-    <section className="section" id="colecao">
-      <div className="collection-head">
-        <h2 className="section-title">Mais vendidas</h2>
-        <div className="filters" role="group" aria-label="Filtrar modelos">
+    <section className="section best" id="mais-vendidos" aria-roledescription="carrossel" aria-label="Mais vendidos">
+      <h2 className="section-title">Mais vendidos</h2>
+      <ul className="best-track" ref={track}>
+        {BEST_SELLERS.map((p, i) => (
+          <li key={p.id} aria-label={`${i + 1} de ${count}`}><ProductCard p={p} eager={i < 2} /></li>
+        ))}
+      </ul>
+      <div className="slider-nav">
+        <button onClick={() => go(-1)} disabled={index <= 0} aria-label="Produto anterior"><CaretLeft size={22} aria-hidden /></button>
+        <span aria-live="polite">{Math.min(index + 1, count)}/{count}</span>
+        <button onClick={() => go(1)} disabled={index >= lastStart} aria-label="Próximo produto"><CaretRight size={22} aria-hidden /></button>
+      </div>
+      <div className="center">
+        <Link to="/colecao" className="btn">Ver todos</Link>
+      </div>
+    </section>
+  )
+}
+
+const FILTERS = [['todas', 'Todas'], ...SERIES.map((s) => [s, s])]
+
+// Home preview: exactly two rows. 8 cards are rendered and CSS hides what exceeds two rows
+// for the current column count (2 on phones, 3 on tablets, 4 on desktop).
+function CollectionPreview() {
+  return (
+    <section className="section collection collection-preview" id="colecao">
+      <h2 className="section-title">Coleção</h2>
+      <ul className="product-grid">
+        {products.slice(0, 8).map((p) => <li key={p.id}><ProductCard p={p} /></li>)}
+      </ul>
+      <div className="center grid-more">
+        <Link to="/colecao" className="btn">Ver mais</Link>
+      </div>
+    </section>
+  )
+}
+
+// Full catalog page. The series filter lives in ?serie= so series cards and shared links land pre-filtered.
+function CollectionPage() {
+  const [filter, setFilterState] = useState(() => {
+    const wanted = new URLSearchParams(window.location.search).get('serie')
+    return SERIES.includes(wanted) ? wanted : 'todas'
+  })
+  useTitle(filter === 'todas' ? 'Coleção | GM NICHE' : `${filter} | GM NICHE`)
+  const setFilter = (key) => {
+    setFilterState(key)
+    const url = new URL(window.location.href)
+    if (key === 'todas') url.searchParams.delete('serie')
+    else url.searchParams.set('serie', key)
+    window.history.replaceState(window.history.state, '', url.pathname + url.search)
+  }
+  const list = products.filter((p) => filter === 'todas' || p.series === filter)
+
+  return (
+    <section className="section collection collection-page">
+      <BackLink to="/" label="Início" />
+      <h1 className="section-title">Coleção</h1>
+      <div className="collection-bar">
+        <div className="filters" role="group" aria-label="Filtrar por coleção">
           {FILTERS.map(([key, label]) => (
             <button key={key} className={filter === key ? 'active' : ''} aria-pressed={filter === key} onClick={() => setFilter(key)}>{label}</button>
           ))}
         </div>
+        <span className="collection-count" aria-live="polite">{list.length} {list.length === 1 ? 'produto' : 'produtos'}</span>
       </div>
-      <ul className="slider" ref={track}>
-        {list.map((p) => (
-          <li key={p.id}>
-            <button className="card" onClick={() => onOpen(p)}>
-              <span className="card-media">
-                <img src={productImage(p.id)} alt={`Banda ${p.name} em ${p.tone.toLowerCase()}`} width="900" height="900" loading="lazy" />
-                {p.stock === 0 && <span className="badge">Esgotado</span>}
-                {p.stock > 0 && p.limited && <span className="badge gold">Edição limitada</span>}
-              </span>
-              <span className="card-name">{p.name}</span>
-              <span className="card-price">{formatPrice(p.price)}</span>
-              <span className="card-swatch" style={{ background: p.color }} aria-hidden="true" />
-            </button>
-          </li>
-        ))}
+      <ul className="product-grid">
+        {list.map((p, i) => <li key={p.id}><ProductCard p={p} eager={i < 4} /></li>)}
       </ul>
-      <div className="slider-nav">
-        <button onClick={() => go(-1)} disabled={page <= 1} aria-label="Modelos anteriores"><Chevron dir="left" /></button>
-        <span aria-live="polite">{page}/{total}</span>
-        <button onClick={() => go(1)} disabled={page >= total} aria-label="Próximos modelos"><Chevron /></button>
-      </div>
-      <div className="center">
-        <a className="btn" href="#packs">Ver os packs</a>
-      </div>
     </section>
   )
 }
@@ -191,38 +399,39 @@ function Marquee() {
   )
 }
 
-function Limited({ onOpen }) {
-  const alpine = products.find((p) => p.id === 'alpine')
+function Featured() {
   return (
-    <section className="section feature" id="edicao-limitada">
+    <section className="section feature" id="destaque">
       <div className="feature-copy">
-        <h2 className="feature-title">Alpine, 40 unidades</h2>
-        <p>Champanhe com fecho dourado. Quando acaba, não volta. Restam {alpine.stock} unidades.</p>
-        <button className="btn" onClick={() => onOpen(alpine)}>Ver a Alpine</button>
+        <h2 className="feature-title">
+          <img className="feature-logo" src="/logo.png" width="1200" height="145" alt="GM NICHE" />
+        </h2>
+        <p className="feature-statement">Não é sobre pulseiras, é sobre <span className="gold-text">lifestyle</span>.</p>
+        <Link to="/colecao" className="btn solid">Descubra seu estilo</Link>
       </div>
       <div className="feature-media">
-        <img src={productImage('alpine')} alt="Banda Alpine em champanhe com fecho dourado" width="900" height="900" loading="lazy" />
+        <img src="/lifestyle.webp" alt="Pulseira FUCK 9-5 no pulso, em uma mesa à beira-mar ao pôr do sol" width="1122" height="1402" loading="lazy" decoding="async" />
       </div>
     </section>
   )
 }
 
-function Categories({ pick }) {
-  const cats = [
-    { key: 'classicas', label: 'Clássicas', img: 'monza', text: 'Preto, cinza, branco e marinho' },
-    { key: 'limitadas', label: 'Edição limitada', img: 'alpine', text: 'Poucas unidades, sem reposição' },
-    { key: 'packs', label: 'Packs', img: 'jet', text: 'Duas ou três bandas com desconto' },
-  ]
+function Categories() {
+  const cats = SERIES.filter((s) => s !== 'Estampas').map((s) => {
+    const items = products.filter((p) => p.series === s)
+    const cover = findProduct(SERIES_COVER[s]) ?? items[0]
+    return { key: s, label: s, img: cover.thumb, text: `${items.length} ${items.length === 1 ? 'modelo' : 'modelos'}` }
+  }).filter((c) => c.img)
   return (
     <section className="section categories">
-      <h2 className="section-title">Categorias</h2>
+      <h2 className="section-title">Coleções</h2>
       <div className="cat-grid">
         {cats.map((c) => (
-          <a key={c.key} className="cat" href={c.key === 'packs' ? '#packs' : '#colecao'} onClick={() => c.key !== 'packs' && pick(c.key)}>
-            <span className="cat-media"><img src={productImage(c.img)} alt="" width="900" height="900" loading="lazy" /></span>
+          <Link key={c.key} className="cat" to={`/colecao?serie=${encodeURIComponent(c.key)}`}>
+            <span className="cat-media"><img src={c.img} alt="" width="600" height="600" loading="lazy" /></span>
             <span className="cat-label">{c.label}</span>
             <span className="cat-text">{c.text}</span>
-          </a>
+          </Link>
         ))}
       </div>
     </section>
@@ -242,7 +451,7 @@ function Packs() {
             </div>
             <div className="pack-foot">
               <b>{formatPrice(pk.price)}</b>
-              <a className={`btn ${pk.dark ? 'light' : ''}`} href={whatsappLink(`Olá! Quero montar o ${pk.name} (${formatPrice(pk.price)}).`)} target="_blank" rel="noreferrer">Montar o pack</a>
+              <Link to={`/pack/${pk.id}`} className={`btn ${pk.dark ? 'light' : ''}`}>Montar o pack</Link>
             </div>
           </div>
         ))}
@@ -258,7 +467,7 @@ function Faq() {
         <h2 className="section-title center">Dúvidas frequentes</h2>
         {faqs.map((f) => (
           <details key={f.q}>
-            <summary>{f.q}<Chevron /></summary>
+            <summary>{f.q}<CaretRight size={18} aria-hidden /></summary>
             <p>{f.a}</p>
           </details>
         ))}
@@ -267,17 +476,273 @@ function Faq() {
   )
 }
 
-function Club() {
+function HomePage() {
+  useTitle('GM NICHE')
   return (
-    <section className="club">
-      <h2 className="section-title">Entre para a lista</h2>
-      <p>Avisamos no WhatsApp quando sai edição nova ou um modelo volta ao estoque.</p>
-      <a className="btn solid" href={whatsappLink('Olá! Quero entrar na lista de lançamentos da GM NICHE.')} target="_blank" rel="noreferrer">
-        {WA_ICON}<span>Entrar na lista</span>
-      </a>
+    <>
+      <Hero />
+      <BestSellers />
+      <Marquee />
+      <Featured />
+      <Categories />
+      <CollectionPreview />
+      <Packs />
+      <Faq />
+    </>
+  )
+}
+
+/* ---------- Product page ---------- */
+
+function BackLink({ to = '/colecao', label = 'Coleção' }) {
+  return (
+    <Link to={to} className="back-link">
+      <ArrowLeft size={18} aria-hidden /> {label}
+    </Link>
+  )
+}
+
+function Gallery({ photos, name }) {
+  const [index, setIndex] = useState(0)
+  const i = Math.min(index, photos.length - 1)
+  const current = photos[i]
+  const go = (d) => setIndex((i + d + photos.length) % photos.length)
+  return (
+    <div
+      className="gallery"
+      role="region"
+      aria-roledescription="galeria"
+      aria-label={`Fotos de ${name}`}
+      tabIndex={photos.length > 1 ? 0 : undefined}
+      onKeyDown={(e) => {
+        if (photos.length < 2) return
+        if (e.key === 'ArrowRight') { e.preventDefault(); go(1) }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1) }
+      }}
+    >
+      <div className="gallery-main">
+        <img key={current.src} src={current.src} alt={`${name}, foto ${i + 1} de ${photos.length}`} width={current.w} height={current.h} />
+        {photos.length > 1 && (
+          <>
+            <button className="gallery-arrow prev" onClick={() => go(-1)} aria-label="Foto anterior"><CaretLeft size={20} aria-hidden /></button>
+            <button className="gallery-arrow next" onClick={() => go(1)} aria-label="Próxima foto"><CaretRight size={20} aria-hidden /></button>
+          </>
+        )}
+      </div>
+      {photos.length > 1 && (
+        <ul className="gallery-thumbs">
+          {photos.map((ph, n) => (
+            <li key={ph.src}>
+              <button aria-label={`Ver foto ${n + 1}`} aria-current={n === i} onClick={() => setIndex(n)}>
+                <img src={ph.src} alt="" width={ph.w} height={ph.h} loading="lazy" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
+function ProductPage({ id }) {
+  const p = findProduct(id)
+  const cart = useCart()
+  // The card's color dot arrives as ?acabamento=<finish>; unknown values fall back to the first finish.
+  const [variantKey, setVariantKey] = useState(() => {
+    const wanted = new URLSearchParams(window.location.search).get('acabamento')
+    return p?.variants.some((v) => v.key === wanted) ? wanted : p?.variants[0].key
+  })
+  const [qty, setQty] = useState(1)
+  const [added, setAdded] = useState(false)
+  const buyRef = useRef(null)
+  const [buyVisible, setBuyVisible] = useState(true)
+  useTitle(p ? `${p.name} | GM NICHE` : 'Produto não encontrado | GM NICHE')
+  const chooseVariant = (key) => {
+    setVariantKey(key)
+    const url = new URL(window.location.href)
+    url.searchParams.set('acabamento', key)
+    window.history.replaceState(window.history.state, '', url.pathname + url.search + url.hash)
+  }
+  // Phone bar with price + add button shows once the main button has scrolled above the screen.
+  // The huge bottom margin makes "below the screen" count as visible, so the only state change is
+  // crossing the top edge; that change fires even when the page jumps past the button in one step.
+  useEffect(() => {
+    const el = buyRef.current
+    if (!el) return
+    // Several entries can queue up during a fast scroll; the last one is the current state.
+    const io = new IntersectionObserver((entries) => setBuyVisible(entries[entries.length - 1].isIntersecting), { rootMargin: '0px 0px 100000px 0px' })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+  useEffect(() => {
+    if (!added) return
+    const t = setTimeout(() => setAdded(false), 1800)
+    return () => clearTimeout(t)
+  }, [added])
+
+  if (!p) return <NotFound />
+
+  const variant = p.variants.find((v) => v.key === variantKey) ?? p.variants[0]
+  const lineKey = `product:${p.id}:${variant.key}`
+  // Stock is per product, shared across finishes.
+  const inCart = cart.items.filter((l) => l.refId === p.id && l.kind === 'product').reduce((n, l) => n + l.qty, 0)
+  const left = Math.max(0, p.stock - inCart)
+  const others = products.filter((o) => o.id !== p.id && o.series === p.series).concat(products.filter((o) => o.series !== p.series)).slice(0, 4)
+
+  const addToCart = () => {
+    cart.add({
+      key: lineKey, kind: 'product', refId: p.id,
+      name: p.name, detail: `Fecho ${variant.label.toLowerCase()}`, price: p.price, image: variant.photos[0].src,
+      max: Math.min(p.stock, (cart.items.find((l) => l.key === lineKey)?.qty ?? 0) + left),
+    }, Math.min(qty, left))
+    setAdded(true)
+    setQty(1)
+  }
+
+  return (
+    <article className="pdp">
+      <div className="pdp-main">
+        <div className="pdp-stage">
+          <Gallery key={variant.key} photos={variant.photos} name={p.name} />
+        </div>
+        <div className="pdp-info">
+          <BackLink />
+          <h1>{p.name}</h1>
+          <p className="pdp-tone">{p.series}</p>
+          <p className="pdp-price">{formatPrice(p.price)}</p>
+          {p.blurb && <p className="pdp-blurb">{p.blurb}</p>}
+
+          <fieldset className="finish">
+            <legend>Fecho: <b>{variant.label}</b></legend>
+            <div className="finish-options">
+              {p.variants.map((v) => (
+                <label key={v.key} className="finish-option">
+                  <input type="radio" name="acabamento" value={v.key} checked={v.key === variant.key} onChange={() => chooseVariant(v.key)} />
+                  <img src={v.photos[0].src} alt="" width={v.photos[0].w} height={v.photos[0].h} loading="lazy" />
+                  <span>{v.label}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          {p.stock === 0 ? (
+            <button className="btn wide" disabled>Esgotado</button>
+          ) : (
+            <div className="pdp-buy" ref={buyRef}>
+              <Stepper value={Math.min(qty, Math.max(1, left))} max={Math.max(1, left)} onChange={setQty} label="Quantidade" />
+              <button className="btn solid add-btn" onClick={addToCart} disabled={left === 0} data-added={added}>
+                <span className="add-label">{left === 0 ? 'Limite no carrinho' : 'Adicionar ao carrinho'}</span>
+                <span className="add-done" aria-hidden={!added}><Check size={18} aria-hidden /> Adicionado</span>
+              </button>
+            </div>
+          )}
+
+          <dl className="specs">
+            <div><dt>Compatível</dt><dd>{COMPATIBILITY}</dd></div>
+            <div><dt>Acabamentos</dt><dd>{p.variants.map((v) => v.label).join(', ')}</dd></div>
+          </dl>
+        </div>
+      </div>
+
+      {p.stock > 0 && (
+        <div className="buy-bar" data-show={!buyVisible} inert={buyVisible} aria-hidden={buyVisible}>
+          <div>
+            <b>{formatPrice(p.price)}</b>
+            <span>Fecho {variant.label.toLowerCase()}</span>
+          </div>
+          <button className="btn solid" onClick={addToCart} disabled={left === 0}>{left === 0 ? 'Limite' : 'Adicionar'}</button>
+        </div>
+      )}
+
+      <section className="section pdp-more">
+        <h2 className="section-title">Veja também</h2>
+        <ul className="more-grid">
+          {others.map((o) => <li key={o.id}><ProductCard p={o} /></li>)}
+        </ul>
+      </section>
+    </article>
+  )
+}
+
+/* ---------- Pack page ---------- */
+
+function PackPage({ id }) {
+  const pk = findPack(id)
+  const cart = useCart()
+  const [picked, setPicked] = useState([])
+  const [series, setSeries] = useState('todas')
+  useTitle(pk ? `${pk.name} | GM NICHE` : 'Pack não encontrado | GM NICHE')
+  if (!pk) return <NotFound />
+
+  const available = products.filter((p) => p.stock > 0 && (series === 'todas' || p.series === series))
+  const full = picked.length === pk.size
+  const toggle = (pid) => setPicked((cur) => (cur.includes(pid) ? cur.filter((x) => x !== pid) : cur.length < pk.size ? [...cur, pid] : cur))
+  const names = picked.map((pid) => findProduct(pid).name)
+
+  const addPack = () => {
+    const sorted = [...picked].sort()
+    cart.add({
+      key: `pack:${pk.id}:${sorted.join('+')}`, kind: 'pack', refId: pk.id,
+      name: pk.name, detail: `${names.join(', ')}. Fecho prata.`, price: pk.price, image: findProduct(picked[0]).thumb,
+      max: Math.min(...picked.map((pid) => findProduct(pid).stock)),
+    })
+    setPicked([])
+  }
+
+  return (
+    <article className="section pack-page">
+      <BackLink />
+      <div className="pack-page-head">
+        <h1>{pk.name}</h1>
+        <p>{pk.copy} Escolha {pk.size} modelos diferentes. Os packs saem com fecho prata.</p>
+      </div>
+      <div className="filters" role="group" aria-label="Filtrar por série">
+        {FILTERS.map(([key, label]) => (
+          <button key={key} className={series === key ? 'active' : ''} aria-pressed={series === key} onClick={() => setSeries(key)}>{label}</button>
+        ))}
+      </div>
+      <ul className="pick-grid">
+        {available.map((p) => {
+          const on = picked.includes(p.id)
+          return (
+            <li key={p.id}>
+              <button className="pick" aria-pressed={on} disabled={!on && full} onClick={() => toggle(p.id)}>
+                <span className="card-media">
+                  <img src={p.thumb} alt="" width="600" height="600" loading="lazy" />
+                  <span className="pick-mark" aria-hidden="true"><Check size={16} weight="bold" /></span>
+                </span>
+                <span className="card-name">{p.name}</span>
+                <span className="card-price">{p.series}</span>
+              </button>
+            </li>
+          )
+        })}
+      </ul>
+      <div className="pack-bar">
+        <div>
+          <b>{picked.length} de {pk.size} escolhidos</b>
+          <span>{names.length ? names.join(', ') : 'Nenhum modelo escolhido'}</span>
+        </div>
+        <div className="pack-bar-buy">
+          <b>{formatPrice(pk.price)}</b>
+          <button className="btn solid" disabled={!full} onClick={addPack}>Adicionar ao carrinho</button>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+function NotFound() {
+  return (
+    <section className="section not-found">
+      <h1>Página não encontrada</h1>
+      <p>Esse endereço não existe ou o modelo saiu da loja.</p>
+      <Link to="/colecao" className="btn">Ver a coleção</Link>
     </section>
   )
 }
+
+/* ---------- Shell ---------- */
 
 function Footer() {
   return (
@@ -289,19 +754,18 @@ function Footer() {
         </div>
         <div>
           <h3>Loja</h3>
-          <a href="#colecao">Coleção</a>
-          <a href="#edicao-limitada">Edição limitada</a>
-          <a href="#packs">Packs</a>
+          <Link to="/colecao">Coleção</Link>
+          <Link to="/#destaque">Destaque</Link>
+          <Link to="/#packs">Packs</Link>
         </div>
         <div>
           <h3>Ajuda</h3>
-          <a href="#duvidas">Dúvidas frequentes</a>
+          <Link to="/#duvidas">Dúvidas frequentes</Link>
           <a href="#">Trocas e devoluções</a>
           <a href="#">Privacidade</a>
         </div>
         <div>
-          <h3>Contato</h3>
-          <a href={whatsappLink('Olá!')} target="_blank" rel="noreferrer">WhatsApp</a>
+          <h3>Redes</h3>
           <a href="#" target="_blank" rel="noreferrer">Instagram</a>
           <a href="#" target="_blank" rel="noreferrer">TikTok</a>
         </div>
@@ -314,88 +778,29 @@ function Footer() {
   )
 }
 
-function ProductModal({ product, onClose }) {
-  const dialog = useRef(null)
-  useEffect(() => {
-    const d = dialog.current
-    if (product && !d.open) d.showModal()
-    if (!product && d.open) d.close()
-  }, [product])
-
-  const p = product
-  return (
-    <dialog ref={dialog} className="modal" onClose={onClose} onClick={(e) => e.target === dialog.current && onClose()} aria-labelledby="modal-title">
-      {p && (
-        <div className="modal-body">
-          <button className="icon-btn modal-close" onClick={onClose} aria-label="Fechar">
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
-          </button>
-          <div className="modal-stage">
-            <Suspense fallback={<img src={productImage(p.id)} alt="" />}>
-              <Band3D className="stage-canvas" color={p.color} clasp={p.clasp} sway={0.5} float={false} distance={4.3} />
-            </Suspense>
-            <span className="modal-hint">Arraste o mouse para girar</span>
-          </div>
-          <div className="modal-info">
-            {p.limited && <span className="badge gold static">Edição limitada</span>}
-            <h2 id="modal-title">{p.name}</h2>
-            <p className="modal-tone">{p.tone}</p>
-            <p className="modal-price">{p.stock === 0 ? 'Esgotado' : formatPrice(p.price)}</p>
-            <p>{p.blurb}</p>
-            {p.stock > 0 ? (
-              <a className="btn solid wide" href={whatsappLink(`Olá! Quero a banda ${p.name} (${p.tone}), ${formatPrice(p.price)}.`)} target="_blank" rel="noreferrer">
-                {WA_ICON}<span>Pedir {p.name} no WhatsApp</span>
-              </a>
-            ) : (
-              <a className="btn wide" href={whatsappLink(`Olá! Quero ser avisado quando a banda ${p.name} voltar.`)} target="_blank" rel="noreferrer">Avisar quando voltar</a>
-            )}
-            {p.stock > 0 && p.stock <= 7 && <p className="stock">Restam {p.stock} unidades</p>}
-            <dl className="specs">
-              <div><dt>Compatível</dt><dd>WHOOP 4.0 e MG</dd></div>
-              <div><dt>Tecido</dt><dd>Poliamida, poliéster e elastano</dd></div>
-              <div><dt>Fecho</dt><dd>Aço inoxidável</dd></div>
-              <div><dt>Ajuste</dt><dd>Pulsos até 24 cm</dd></div>
-            </dl>
-          </div>
-        </div>
-      )}
-    </dialog>
-  )
+function Routes() {
+  const route = useRoute()
+  const key = route.name + (route.id ?? '')
+  let page = <HomePage />
+  if (route.name === 'product') page = <ProductPage id={route.id} />
+  if (route.name === 'pack') page = <PackPage id={route.id} />
+  if (route.name === 'collection') page = <CollectionPage />
+  return <main id="conteudo" key={key} className="page">{page}</main>
 }
 
 export default function App() {
-  const [filter, setFilter] = useState('todas')
-  const [open, setOpen] = useState(null)
-  // Mobile WhatsApp bar stays hidden until the hero button has scrolled away.
-  const [pastHero, setPastHero] = useState(false)
+  // Deep link with a hash (e.g. /#packs) should land on that section after first render.
   useEffect(() => {
-    const onScroll = () => setPastHero(window.scrollY > window.innerHeight * 0.8)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    if (window.location.hash) requestAnimationFrame(() => document.querySelector(window.location.hash)?.scrollIntoView())
   }, [])
   return (
-    <>
-      <a className="skip-link" href="#colecao">Pular para a coleção</a>
+    <CartProvider>
+      <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
       <AnnouncementBar />
       <Header />
-      <main>
-        <Hero />
-        <Collection filter={filter} setFilter={setFilter} onOpen={setOpen} />
-        <Marquee />
-        <Limited onOpen={setOpen} />
-        <Categories pick={setFilter} />
-        <Packs />
-        <Faq />
-        <Club />
-      </main>
+      <Routes />
       <Footer />
-      <ProductModal product={open} onClose={() => setOpen(null)} />
-      <div className="sticky-cta" data-hidden={!pastHero} inert={!pastHero}>
-        <a className="btn solid" href={whatsappLink('Olá! Quero comprar uma banda GM NICHE.')} target="_blank" rel="noreferrer">
-          {WA_ICON}<span>Pedir no WhatsApp</span>
-        </a>
-      </div>
-    </>
+      <CartDrawer />
+    </CartProvider>
   )
 }

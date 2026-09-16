@@ -1,75 +1,64 @@
-// Troque pelo seu número com DDI e DDD, só dígitos. Ex.: 5511999998888
-export const WHATSAPP_NUMBER = '5500000000000'
+// Link da finalização de compra (Mercado Pago, Stripe, Shopify...).
+// Enquanto estiver vazio, o carrinho funciona, mas o botão de finalizar fica desativado.
+export const CHECKOUT_URL = ''
 
-export const products = [
-  {
-    id: 'monza',
-    name: 'Monza',
-    tone: 'Preto',
-    color: '#1A1B1E',
-    clasp: '#B9B4AB',
-    price: 249,
-    stock: 7,
-    blurb: 'Preto fosco com fecho em aço escovado. Da academia à reunião sem chamar atenção. Até alguém perguntar onde você comprou.',
-  },
-  {
-    id: 'riviera',
-    name: 'Riviera',
-    tone: 'Cinza',
-    color: '#8E8B86',
-    clasp: '#C9C5BE',
-    price: 249,
-    stock: 12,
-    blurb: 'Cinza pedra com trama fechada. O modelo que combina com qualquer relógio no outro pulso.',
-  },
-  {
-    id: 'fairway',
-    name: 'Fairway',
-    tone: 'Branco',
-    color: '#E8E5DE',
-    clasp: '#C9C5BE',
-    price: 249,
-    stock: 5,
-    blurb: 'Branco quente, fecho prateado. Fica melhor ainda depois de um verão inteiro de uso.',
-  },
-  {
-    id: 'jet',
-    name: 'Jet',
-    tone: 'Azul marinho',
-    color: '#1E2A44',
-    clasp: '#B9B4AB',
-    price: 249,
-    stock: 9,
-    blurb: 'Marinho profundo. Discreto de longe, com cor de perto.',
-  },
-  {
-    id: 'alpine',
-    name: 'Alpine',
-    tone: 'Champanhe',
-    color: '#C4AE84',
-    clasp: '#D9C9A4',
-    price: 349,
-    stock: 3,
-    blurb: 'Champanhe com fecho dourado. Edição limitada de 40 unidades.',
-    limited: true,
-  },
-  {
-    id: 'noir',
-    name: 'Noir',
-    tone: 'Grafite',
-    color: '#3B3B3E',
-    clasp: '#2A2A2C',
-    price: 349,
-    stock: 0,
-    blurb: 'Grafite com fecho preto. Esgotou em quatro dias na primeira leva.',
-    limited: true,
-  },
+import catalog from './catalog.json'
+
+// TROCAR: preço e estoque aplicados a todos os produtos. Valores provisórios.
+export const DEFAULT_PRICE = 249
+export const DEFAULT_STOCK = 10
+
+// CONFIRMAR: uma das fotos diz "WHOOP 5.0/MG". Ajuste aqui se for o caso.
+export const COMPATIBILITY = 'WHOOP 4.0 e MG'
+
+// Gerado por scripts/import-products.mjs a partir das pastas de fotos.
+// Descrição e preço por produto podem ser adicionados aqui depois, pelo id.
+const OVERRIDES = {}
+
+export const products = catalog.map((p) => ({
+  ...p,
+  // The ROLEX DIAMANTE folder (one product per photo) is its own series.
+  series: p.group === 'rolex-diamante' ? 'Rolex Diamante' : p.series,
+  price: DEFAULT_PRICE,
+  stock: DEFAULT_STOCK,
+  blurb: '',
+  ...OVERRIDES[p.id],
+}))
+
+export const SERIES = ['Rolex', 'Rolex Diamante', 'No Risk', 'Gods Plan', 'Estampas']
+
+// Cover image of each series card (product id). Series without an entry use their first product.
+export const SERIES_COVER = {
+  'Rolex Diamante': 'rolex-diamante-branco-dourado',
+}
+
+// Color of each clasp-finish dot on product cards.
+export const FINISH_SWATCH = {
+  prata: 'linear-gradient(135deg, #f4f4f5 0%, #b9bcc2 55%, #e6e7ea 100%)',
+  'prata-fosco': '#aeb0b4',
+  preto: '#141414',
+  fosco: '#4a4a4c',
+  dourado: 'linear-gradient(135deg, #f3dca0 0%, #c79f5d 55%, #e9cf8f 100%)',
+  unico: '#d9d9d9',
+}
+
+// TROCAR: produtos da seção "Mais vendidos", na ordem em que aparecem. Use o id do produto.
+export const BEST_SELLER_IDS = [
+  'rolex-branco',
+  'gods-plan',
+  'rolex-diamante-branco-dourado',
+  'no-risk-no-story-preto',
+  'saint',
+  'faith-over-fear',
+  'rolex-marrom',
+  'dream-big-work-hard',
 ]
 
 export const packs = [
   {
     id: 'duo',
     name: 'Pack Duo',
+    size: 2,
     price: 449,
     copy: 'Duas bandas à sua escolha. Uma para o dia, outra para a noite.',
     dark: true,
@@ -77,18 +66,21 @@ export const packs = [
   {
     id: 'trio',
     name: 'Pack Trio',
+    size: 3,
     price: 599,
-    copy: 'Três bandas por menos do que comprando separadas. Combinações exclusivas do pack.',
+    copy: 'Três bandas por menos do que comprando separadas.',
     dark: false,
   },
 ]
 
-export const productImage = (id) => `/bands/${id}.webp`
+export const findProduct = (id) => products.find((p) => p.id === id)
+export const productImage = (id) => findProduct(id)?.thumb
+export const findPack = (id) => packs.find((p) => p.id === id)
 
 export const faqs = [
   {
     q: 'A banda serve na minha WHOOP?',
-    a: 'Serve na WHOOP 4.0 e na WHOOP MG. Se tiver dúvida sobre o seu modelo, chame no WhatsApp antes de pedir.',
+    a: `Serve na ${COMPATIBILITY}.`,
   },
   {
     q: 'Como acerto o tamanho?',
@@ -100,18 +92,15 @@ export const faqs = [
   },
   {
     q: 'Como funciona o pagamento?',
-    a: 'Você chama no WhatsApp com o modelo escolhido. Respondemos em até 1 dia útil com o link de pagamento por Pix ou cartão.',
+    a: 'Adicione as bandas ao carrinho e finalize a compra. O pagamento é por Pix ou cartão.',
   },
   {
     q: 'Quanto tempo demora para chegar?',
-    a: 'Postamos em até 2 dias úteis depois do pagamento e enviamos o código de rastreio pelo WhatsApp.',
+    a: 'Postamos em até 2 dias úteis depois do pagamento e enviamos o código de rastreio.',
   },
 ]
 
+const brl = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })
 export function formatPrice(value) {
-  return `R$ ${value.toLocaleString('pt-BR')}`
-}
-
-export function whatsappLink(message) {
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+  return brl.format(value)
 }

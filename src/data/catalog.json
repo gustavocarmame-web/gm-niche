@@ -1,0 +1,1340 @@
+[
+  {
+    "id": "bad",
+    "name": "BAD",
+    "series": "Estampas",
+    "thumb": "/products/bad/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/bad/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/bad/thumb-prata.webp"
+      },
+      {
+        "key": "prata-fosco",
+        "label": "Prata fosco",
+        "photos": [
+          {
+            "src": "/products/bad/prata-fosco-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/bad/thumb-prata-fosco.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/bad/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/bad/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "bla-bla",
+    "name": "BLA BLA",
+    "series": "Estampas",
+    "thumb": "/products/bla-bla/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/bla-bla/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/bla-bla/prata-2.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/bla-bla/thumb-prata.webp"
+      },
+      {
+        "key": "prata-fosco",
+        "label": "Prata fosco",
+        "photos": [
+          {
+            "src": "/products/bla-bla/prata-fosco-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/bla-bla/thumb-prata-fosco.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/bla-bla/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/bla-bla/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "cruz",
+    "name": "CRUZ",
+    "series": "Estampas",
+    "thumb": "/products/cruz/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/cruz/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/cruz/prata-2.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/cruz/prata-3.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/cruz/thumb-prata.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/cruz/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/cruz/preto-2.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/cruz/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "cruz-preto-e-cinza",
+    "name": "CRUZ PRETO E CINZA",
+    "series": "Estampas",
+    "thumb": "/products/cruz-preto-e-cinza/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/cruz-preto-e-cinza/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/cruz-preto-e-cinza/thumb-prata.webp"
+      },
+      {
+        "key": "prata-fosco",
+        "label": "Prata fosco",
+        "photos": [
+          {
+            "src": "/products/cruz-preto-e-cinza/prata-fosco-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/cruz-preto-e-cinza/thumb-prata-fosco.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/cruz-preto-e-cinza/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/cruz-preto-e-cinza/preto-2.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/cruz-preto-e-cinza/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "dream-big-work-hard",
+    "name": "DREAM BIG WORK HARD",
+    "series": "Estampas",
+    "thumb": "/products/dream-big-work-hard/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/dream-big-work-hard/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/dream-big-work-hard/prata-2.webp",
+            "w": 1200,
+            "h": 1600
+          },
+          {
+            "src": "/products/dream-big-work-hard/prata-3.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/dream-big-work-hard/thumb-prata.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/dream-big-work-hard/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/dream-big-work-hard/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "faith-over-fear",
+    "name": "FAITH OVER FEAR",
+    "series": "Estampas",
+    "thumb": "/products/faith-over-fear/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/faith-over-fear/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/faith-over-fear/prata-2.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/faith-over-fear/thumb-prata.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/faith-over-fear/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/faith-over-fear/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "fuck-9-5",
+    "name": "FUCK 9-5",
+    "series": "Estampas",
+    "thumb": "/products/fuck-9-5/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/fuck-9-5/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/fuck-9-5/prata-2.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/fuck-9-5/thumb-prata.webp"
+      },
+      {
+        "key": "prata-fosco",
+        "label": "Prata fosco",
+        "photos": [
+          {
+            "src": "/products/fuck-9-5/prata-fosco-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/fuck-9-5/thumb-prata-fosco.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/fuck-9-5/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/fuck-9-5/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "fuck-love-get-money",
+    "name": "FUCK LOVE GET MONEY",
+    "series": "Estampas",
+    "thumb": "/products/fuck-love-get-money/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/fuck-love-get-money/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/fuck-love-get-money/prata-2.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/fuck-love-get-money/thumb-prata.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/fuck-love-get-money/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/fuck-love-get-money/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "gods-plan",
+    "name": "GODS PLAN",
+    "series": "Gods Plan",
+    "thumb": "/products/gods-plan/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/gods-plan/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/gods-plan/prata-2.webp",
+            "w": 1200,
+            "h": 1600
+          },
+          {
+            "src": "/products/gods-plan/prata-3.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/gods-plan/thumb-prata.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/gods-plan/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/gods-plan/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "gods-plan-jornal",
+    "name": "GODS PLAN JORNAL",
+    "series": "Gods Plan",
+    "thumb": "/products/gods-plan-jornal/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/gods-plan-jornal/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/gods-plan-jornal/thumb-prata.webp"
+      },
+      {
+        "key": "prata-fosco",
+        "label": "Prata fosco",
+        "photos": [
+          {
+            "src": "/products/gods-plan-jornal/prata-fosco-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/gods-plan-jornal/prata-fosco-2.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/gods-plan-jornal/thumb-prata-fosco.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/gods-plan-jornal/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/gods-plan-jornal/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "i-fell-like-pablo",
+    "name": "I FELL LIKE PABLO",
+    "series": "Estampas",
+    "thumb": "/products/i-fell-like-pablo/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/i-fell-like-pablo/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/i-fell-like-pablo/thumb-prata.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/i-fell-like-pablo/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/i-fell-like-pablo/thumb-preto.webp"
+      },
+      {
+        "key": "dourado",
+        "label": "Dourado",
+        "photos": [
+          {
+            "src": "/products/i-fell-like-pablo/dourado-1.webp",
+            "w": 1174,
+            "h": 1340
+          },
+          {
+            "src": "/products/i-fell-like-pablo/dourado-2.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/i-fell-like-pablo/thumb-dourado.webp"
+      }
+    ]
+  },
+  {
+    "id": "my-only-competition-is-my-potencial",
+    "name": "MY ONLY COMPETITION IS MY POTENCIAL",
+    "series": "Estampas",
+    "thumb": "/products/my-only-competition-is-my-potencial/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/my-only-competition-is-my-potencial/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/my-only-competition-is-my-potencial/prata-2.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/my-only-competition-is-my-potencial/thumb-prata.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/my-only-competition-is-my-potencial/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/my-only-competition-is-my-potencial/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "need-money-for-everythink",
+    "name": "NEED MONEY FOR EVERYTHINK",
+    "series": "Estampas",
+    "thumb": "/products/need-money-for-everythink/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/need-money-for-everythink/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/need-money-for-everythink/prata-2.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/need-money-for-everythink/thumb-prata.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/need-money-for-everythink/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/need-money-for-everythink/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "need-money-for-porche",
+    "name": "NEED MONEY FOR PORCHE",
+    "series": "Estampas",
+    "thumb": "/products/need-money-for-porche/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/need-money-for-porche/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/need-money-for-porche/prata-2.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/need-money-for-porche/thumb-prata.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/need-money-for-porche/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/need-money-for-porche/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "no-risk-no-porche-azul",
+    "name": "NO RISK NO PORCHE AZUL",
+    "series": "No Risk",
+    "thumb": "/products/no-risk-no-porche-azul/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/no-risk-no-porche-azul/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/no-risk-no-porche-azul/prata-2.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/no-risk-no-porche-azul/thumb-prata.webp"
+      },
+      {
+        "key": "prata-fosco",
+        "label": "Prata fosco",
+        "photos": [
+          {
+            "src": "/products/no-risk-no-porche-azul/prata-fosco-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/no-risk-no-porche-azul/thumb-prata-fosco.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/no-risk-no-porche-azul/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/no-risk-no-porche-azul/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "no-risk-no-story-colorido",
+    "name": "NO RISK NO STORY COLORIDO",
+    "series": "No Risk",
+    "thumb": "/products/no-risk-no-story-colorido/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/no-risk-no-story-colorido/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/no-risk-no-story-colorido/thumb-prata.webp"
+      },
+      {
+        "key": "prata-fosco",
+        "label": "Prata fosco",
+        "photos": [
+          {
+            "src": "/products/no-risk-no-story-colorido/prata-fosco-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/no-risk-no-story-colorido/thumb-prata-fosco.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/no-risk-no-story-colorido/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/no-risk-no-story-colorido/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "no-risk-no-story-preto",
+    "name": "NO RISK NO STORY PRETO",
+    "series": "No Risk",
+    "thumb": "/products/no-risk-no-story-preto/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/no-risk-no-story-preto/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/no-risk-no-story-preto/prata-2.webp",
+            "w": 1086,
+            "h": 1448
+          }
+        ],
+        "thumb": "/products/no-risk-no-story-preto/thumb-prata.webp"
+      },
+      {
+        "key": "prata-fosco",
+        "label": "Prata fosco",
+        "photos": [
+          {
+            "src": "/products/no-risk-no-story-preto/prata-fosco-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/no-risk-no-story-preto/thumb-prata-fosco.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/no-risk-no-story-preto/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/no-risk-no-story-preto/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "pray-trust-relax-wait",
+    "name": "PRAY TRUST RELAX WAIT",
+    "series": "Estampas",
+    "thumb": "/products/pray-trust-relax-wait/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/pray-trust-relax-wait/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/pray-trust-relax-wait/prata-2.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/pray-trust-relax-wait/thumb-prata.webp"
+      },
+      {
+        "key": "prata-fosco",
+        "label": "Prata fosco",
+        "photos": [
+          {
+            "src": "/products/pray-trust-relax-wait/prata-fosco-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/pray-trust-relax-wait/thumb-prata-fosco.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/pray-trust-relax-wait/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/pray-trust-relax-wait/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "rei-montando",
+    "name": "REI MONTANDO",
+    "series": "Estampas",
+    "thumb": "/products/rei-montando/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/rei-montando/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/rei-montando/thumb-prata.webp"
+      },
+      {
+        "key": "prata-fosco",
+        "label": "Prata fosco",
+        "photos": [
+          {
+            "src": "/products/rei-montando/prata-fosco-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/rei-montando/thumb-prata-fosco.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/rei-montando/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/rei-montando/preto-2.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/rei-montando/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "rolex-azul",
+    "name": "ROLEX AZUL",
+    "series": "Rolex",
+    "thumb": "/products/rolex-azul/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/rolex-azul/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/rolex-azul/thumb-prata.webp"
+      }
+    ]
+  },
+  {
+    "id": "rolex-branco",
+    "name": "ROLEX BRANCO",
+    "series": "Rolex",
+    "thumb": "/products/rolex-branco/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/rolex-branco/prata-1.webp",
+            "w": 400,
+            "h": 400
+          },
+          {
+            "src": "/products/rolex-branco/prata-2.webp",
+            "w": 1086,
+            "h": 1448
+          },
+          {
+            "src": "/products/rolex-branco/geral-1.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/rolex-branco/thumb-prata.webp"
+      },
+      {
+        "key": "prata-fosco",
+        "label": "Prata fosco",
+        "photos": [
+          {
+            "src": "/products/rolex-branco/prata-fosco-1.webp",
+            "w": 400,
+            "h": 400
+          },
+          {
+            "src": "/products/rolex-branco/geral-1.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/rolex-branco/thumb-prata-fosco.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/rolex-branco/preto-1.webp",
+            "w": 400,
+            "h": 400
+          },
+          {
+            "src": "/products/rolex-branco/geral-1.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/rolex-branco/thumb-preto.webp"
+      },
+      {
+        "key": "dourado",
+        "label": "Dourado",
+        "photos": [
+          {
+            "src": "/products/rolex-branco/dourado-1.webp",
+            "w": 1086,
+            "h": 1448
+          },
+          {
+            "src": "/products/rolex-branco/geral-1.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/rolex-branco/thumb-dourado.webp"
+      }
+    ]
+  },
+  {
+    "id": "rolex-branco-quadriculado",
+    "name": "ROLEX BRANCO QUADRICULADO",
+    "series": "Rolex",
+    "thumb": "/products/rolex-branco-quadriculado/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/rolex-branco-quadriculado/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/rolex-branco-quadriculado/thumb-prata.webp"
+      }
+    ]
+  },
+  {
+    "id": "rolex-diamante-branco-dourado",
+    "name": "ROLEX DIAMANTE BRANCO DOURADO",
+    "series": "Rolex",
+    "group": "rolex-diamante",
+    "thumb": "/products/rolex-diamante-branco-dourado/thumb-dourado.webp",
+    "variants": [
+      {
+        "key": "dourado",
+        "label": "Dourado",
+        "thumb": "/products/rolex-diamante-branco-dourado/thumb-dourado.webp",
+        "photos": [
+          {
+            "src": "/products/rolex-diamante-branco-dourado/1.webp",
+            "w": 800,
+            "h": 800
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rolex-diamante-branco-prata",
+    "name": "ROLEX DIAMANTE BRANCO PRATA",
+    "series": "Rolex",
+    "group": "rolex-diamante",
+    "thumb": "/products/rolex-diamante-branco-prata/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "thumb": "/products/rolex-diamante-branco-prata/thumb-prata.webp",
+        "photos": [
+          {
+            "src": "/products/rolex-diamante-branco-prata/1.webp",
+            "w": 800,
+            "h": 800
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rolex-diamante-prata",
+    "name": "ROLEX DIAMANTE PRATA",
+    "series": "Rolex",
+    "group": "rolex-diamante",
+    "thumb": "/products/rolex-diamante-prata/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "thumb": "/products/rolex-diamante-prata/thumb-prata.webp",
+        "photos": [
+          {
+            "src": "/products/rolex-diamante-prata/1.webp",
+            "w": 800,
+            "h": 800
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rolex-diamante-preto-dourado",
+    "name": "ROLEX DIAMANTE PRETO DOURADO",
+    "series": "Rolex",
+    "group": "rolex-diamante",
+    "thumb": "/products/rolex-diamante-preto-dourado/thumb-dourado.webp",
+    "variants": [
+      {
+        "key": "dourado",
+        "label": "Dourado",
+        "thumb": "/products/rolex-diamante-preto-dourado/thumb-dourado.webp",
+        "photos": [
+          {
+            "src": "/products/rolex-diamante-preto-dourado/1.webp",
+            "w": 800,
+            "h": 800
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rolex-diamante-preto-prata",
+    "name": "ROLEX DIAMANTE PRETO PRATA",
+    "series": "Rolex",
+    "group": "rolex-diamante",
+    "thumb": "/products/rolex-diamante-preto-prata/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "thumb": "/products/rolex-diamante-preto-prata/thumb-prata.webp",
+        "photos": [
+          {
+            "src": "/products/rolex-diamante-preto-prata/1.webp",
+            "w": 800,
+            "h": 800
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rolex-diamante-verde",
+    "name": "ROLEX DIAMANTE VERDE",
+    "series": "Rolex",
+    "group": "rolex-diamante",
+    "thumb": "/products/rolex-diamante-verde/thumb-unico.webp",
+    "variants": [
+      {
+        "key": "unico",
+        "label": "Único",
+        "thumb": "/products/rolex-diamante-verde/thumb-unico.webp",
+        "photos": [
+          {
+            "src": "/products/rolex-diamante-verde/1.webp",
+            "w": 800,
+            "h": 800
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rolex-marrom",
+    "name": "ROLEX MARROM",
+    "series": "Rolex",
+    "thumb": "/products/rolex-marrom/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/rolex-marrom/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/rolex-marrom/thumb-prata.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/rolex-marrom/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/rolex-marrom/thumb-preto.webp"
+      },
+      {
+        "key": "dourado",
+        "label": "Dourado",
+        "photos": [
+          {
+            "src": "/products/rolex-marrom/dourado-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/rolex-marrom/thumb-dourado.webp"
+      }
+    ]
+  },
+  {
+    "id": "rolex-preto",
+    "name": "ROLEX PRETO",
+    "series": "Rolex",
+    "thumb": "/products/rolex-preto/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/rolex-preto/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/rolex-preto/prata-2.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/rolex-preto/thumb-prata.webp"
+      }
+    ]
+  },
+  {
+    "id": "saint",
+    "name": "SAINT",
+    "series": "Estampas",
+    "thumb": "/products/saint/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/saint/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/saint/geral-1.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/saint/thumb-prata.webp"
+      },
+      {
+        "key": "prata-fosco",
+        "label": "Prata fosco",
+        "photos": [
+          {
+            "src": "/products/saint/prata-fosco-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/saint/geral-1.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/saint/thumb-prata-fosco.webp"
+      },
+      {
+        "key": "fosco",
+        "label": "Fosco",
+        "photos": [
+          {
+            "src": "/products/saint/fosco-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/saint/geral-1.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/saint/thumb-fosco.webp"
+      }
+    ]
+  },
+  {
+    "id": "sorry-i-dont-care",
+    "name": "SORRY I DONT CARE",
+    "series": "Estampas",
+    "thumb": "/products/sorry-i-dont-care/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/sorry-i-dont-care/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/sorry-i-dont-care/prata-2.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/sorry-i-dont-care/thumb-prata.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/sorry-i-dont-care/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/sorry-i-dont-care/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "think-outside-the-box",
+    "name": "THINK OUTSIDE THE BOX",
+    "series": "Estampas",
+    "thumb": "/products/think-outside-the-box/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/think-outside-the-box/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          },
+          {
+            "src": "/products/think-outside-the-box/prata-2.webp",
+            "w": 1200,
+            "h": 1600
+          }
+        ],
+        "thumb": "/products/think-outside-the-box/thumb-prata.webp"
+      },
+      {
+        "key": "prata-fosco",
+        "label": "Prata fosco",
+        "photos": [
+          {
+            "src": "/products/think-outside-the-box/prata-fosco-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/think-outside-the-box/thumb-prata-fosco.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/think-outside-the-box/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/think-outside-the-box/thumb-preto.webp"
+      }
+    ]
+  },
+  {
+    "id": "you-are-your-only-limit",
+    "name": "YOU ARE YOUR ONLY LIMIT",
+    "series": "Estampas",
+    "thumb": "/products/you-are-your-only-limit/thumb-prata.webp",
+    "variants": [
+      {
+        "key": "prata",
+        "label": "Prata",
+        "photos": [
+          {
+            "src": "/products/you-are-your-only-limit/prata-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/you-are-your-only-limit/thumb-prata.webp"
+      },
+      {
+        "key": "preto",
+        "label": "Preto",
+        "photos": [
+          {
+            "src": "/products/you-are-your-only-limit/preto-1.webp",
+            "w": 1173,
+            "h": 1341
+          }
+        ],
+        "thumb": "/products/you-are-your-only-limit/thumb-preto.webp"
+      }
+    ]
+  }
+]

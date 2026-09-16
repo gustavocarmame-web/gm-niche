@@ -232,7 +232,7 @@ function Hero() {
       </div>
       <div className="hero-copy">
         <h1>Sua WHOOP, do seu jeito.</h1>
-        <p>Bandas em edição limitada para {COMPATIBILITY}</p>
+        <p>Pulseiras em edição limitada para {COMPATIBILITY}</p>
         <Link to="/colecao" className="btn solid">Ver a coleção</Link>
       </div>
     </section>
@@ -751,7 +751,7 @@ function Footer() {
       <div className="footer-grid">
         <div>
           <img className="logo" src="/logo.png" width="1200" height="145" alt="GM NICHE" loading="lazy" />
-          <p>Bandas em edição limitada para WHOOP. Sem vínculo com a WHOOP, Inc.</p>
+          <p>Pulseiras em edição limitada para WHOOP. Sem vínculo com a WHOOP, Inc.</p>
         </div>
         <div>
           <h3>Loja</h3>

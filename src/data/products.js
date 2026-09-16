@@ -72,7 +72,7 @@ export const packs = [
     name: 'Pack Duo',
     size: 2,
     price: 449,
-    copy: 'Duas bandas à sua escolha. Uma para o dia, outra para a noite.',
+    copy: 'Duas pulseiras à sua escolha. Uma para o dia, outra para a noite.',
     dark: true,
   },
   {
@@ -80,7 +80,7 @@ export const packs = [
     name: 'Pack Trio',
     size: 3,
     price: 599,
-    copy: 'Três bandas por menos do que comprando separadas.',
+    copy: 'Três pulseiras por menos do que comprando separadas.',
     dark: false,
   },
 ]
@@ -91,20 +91,20 @@ export const findPack = (id) => packs.find((p) => p.id === id)
 
 export const faqs = [
   {
-    q: 'A banda serve na minha WHOOP?',
+    q: 'A pulseira serve na minha WHOOP?',
     a: `Serve na ${COMPATIBILITY}.`,
   },
   {
     q: 'Como acerto o tamanho?',
-    a: 'Não precisa escolher tamanho. O fecho desliza e ajusta a banda em qualquer pulso até 24 cm.',
+    a: 'Não precisa escolher tamanho. O fecho desliza e ajusta a pulseira em qualquer pulso até 24 cm.',
   },
   {
     q: 'Posso treinar e tomar banho com ela?',
-    a: 'Pode. O tecido resiste a suor e água, então a banda acompanha treino, chuva e piscina.',
+    a: 'Pode. O tecido resiste a suor e água, então a pulseira acompanha treino, chuva e piscina.',
   },
   {
     q: 'Como funciona o pagamento?',
-    a: 'Adicione as bandas ao carrinho e finalize a compra. O pagamento é por Pix ou cartão.',
+    a: 'Adicione as pulseiras ao carrinho e finalize a compra. O pagamento é por Pix ou cartão.',
   },
   {
     q: 'Quanto tempo demora para chegar?',

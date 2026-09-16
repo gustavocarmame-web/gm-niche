@@ -1,6 +1,6 @@
 # GM NICHE
 
-Site da marca GM NICHE: bandas em edição limitada compatíveis com WHOOP 4.0 e MG. Pedido pelo WhatsApp, sem carrinho.
+Site da marca GM NICHE: pulseiras em edição limitada compatíveis com WHOOP 4.0 e MG, com carrinho de compras.
 
 ## Rodar no computador
 
@@ -33,5 +33,5 @@ Os arquivos ficam na pasta `dist/`. Suba essa pasta na Vercel, Netlify ou qualqu
 ## Tecnologias
 
 - React + Vite
-- Three.js com React Three Fiber e Drei (banda em 3D, carregada só quando aparece na tela)
+- Three.js com React Three Fiber e Drei (instalado, mas não usado mais pelo site)
 - Fonte Montserrat via Google Fonts

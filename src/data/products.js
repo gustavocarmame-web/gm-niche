@@ -27,8 +27,8 @@ const HIDDEN_FINISHES = {
 
 // Trocas aplicadas só no que o site mostra (nomes de produtos e de coleções).
 // As pastas de fotos, os ids e os endereços das páginas continuam iguais.
-const RLX = 'RLX x WHOOP WHO CARES I´M ALREADY LATE'
-const displayName = (name) => name.replace(/FUCK/gi, 'F*CK').replace(/ROLEX/gi, RLX)
+const WHO_CARES = 'WHO CARES I´M ALREADY LATE'
+const displayName = (name) => name.replace(/FUCK/gi, 'F*CK').replace(/ROLEX/gi, WHO_CARES)
 
 export const products = catalog.map((p) => {
   const hidden = HIDDEN_FINISHES[p.id] ?? []

@@ -494,43 +494,57 @@ function BackLink({ to = '/colecao', label = 'Produtos' }) {
   )
 }
 
+// Full-bleed photo carousel: swipe on phones (scroll-snap), arrows and keyboard on desktop,
+// small dots show the position. No thumbnails.
 function Gallery({ photos, name }) {
+  const track = useRef(null)
   const [index, setIndex] = useState(0)
-  const i = Math.min(index, photos.length - 1)
-  const current = photos[i]
-  const go = (d) => setIndex((i + d + photos.length) % photos.length)
+  const count = photos.length
+
+  useEffect(() => {
+    const el = track.current
+    if (!el) return
+    const update = () => setIndex(Math.min(count - 1, Math.max(0, Math.round(el.scrollLeft / el.clientWidth))))
+    el.addEventListener('scroll', update, { passive: true })
+    return () => el.removeEventListener('scroll', update)
+  }, [count])
+
+  const goTo = (n) => {
+    const el = track.current
+    const target = (n + count) % count
+    el.scrollTo({ left: target * el.clientWidth, behavior: 'smooth' })
+  }
+
   return (
     <div
       className="gallery"
       role="region"
       aria-roledescription="galeria"
       aria-label={`Fotos de ${name}`}
-      tabIndex={photos.length > 1 ? 0 : undefined}
+      tabIndex={count > 1 ? 0 : undefined}
       onKeyDown={(e) => {
-        if (photos.length < 2) return
-        if (e.key === 'ArrowRight') { e.preventDefault(); go(1) }
-        if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1) }
+        if (count < 2) return
+        if (e.key === 'ArrowRight') { e.preventDefault(); goTo(index + 1) }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(index - 1) }
       }}
     >
-      <div className="gallery-main">
-        <img key={current.src} src={current.src} alt={`${name}, foto ${i + 1} de ${photos.length}`} width={current.w} height={current.h} />
-        {photos.length > 1 && (
-          <>
-            <button className="gallery-arrow prev" onClick={() => go(-1)} aria-label="Foto anterior"><CaretLeft size={20} aria-hidden /></button>
-            <button className="gallery-arrow next" onClick={() => go(1)} aria-label="Próxima foto"><CaretRight size={20} aria-hidden /></button>
-          </>
-        )}
-      </div>
-      {photos.length > 1 && (
-        <ul className="gallery-thumbs">
-          {photos.map((ph, n) => (
-            <li key={ph.src}>
-              <button aria-label={`Ver foto ${n + 1}`} aria-current={n === i} onClick={() => setIndex(n)}>
-                <img src={ph.src} alt="" width={ph.w} height={ph.h} loading="lazy" />
-              </button>
-            </li>
-          ))}
-        </ul>
+      <ul className="gallery-track" ref={track}>
+        {photos.map((ph, n) => (
+          <li key={ph.src} className="gallery-slide" aria-hidden={n !== index}>
+            <img src={ph.src} alt={`${name}, foto ${n + 1} de ${count}`} width={ph.w} height={ph.h} loading={n === 0 ? 'eager' : 'lazy'} decoding="async" draggable="false" />
+          </li>
+        ))}
+      </ul>
+      {count > 1 && (
+        <>
+          <button className="gallery-arrow prev" onClick={() => goTo(index - 1)} aria-label="Foto anterior"><CaretLeft size={20} aria-hidden /></button>
+          <button className="gallery-arrow next" onClick={() => goTo(index + 1)} aria-label="Próxima foto"><CaretRight size={20} aria-hidden /></button>
+          <div className="gallery-dots">
+            {photos.map((ph, n) => (
+              <button key={ph.src} aria-label={`Ver foto ${n + 1} de ${count}`} aria-current={n === index} onClick={() => goTo(n)} />
+            ))}
+          </div>
+        </>
       )}
     </div>
   )

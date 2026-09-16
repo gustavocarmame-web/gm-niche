@@ -83,6 +83,31 @@ export const packs = [
   },
 ]
 
+export const productImage = (id) => `/bands/${id}.webp`
+
+export const faqs = [
+  {
+    q: 'A banda serve na minha WHOOP?',
+    a: 'Serve na WHOOP 4.0 e na WHOOP MG. Se tiver dúvida sobre o seu modelo, chame no WhatsApp antes de pedir.',
+  },
+  {
+    q: 'Como acerto o tamanho?',
+    a: 'Não precisa escolher tamanho. O fecho desliza e ajusta a banda em qualquer pulso até 24 cm.',
+  },
+  {
+    q: 'Posso treinar e tomar banho com ela?',
+    a: 'Pode. O tecido resiste a suor e água, então a banda acompanha treino, chuva e piscina.',
+  },
+  {
+    q: 'Como funciona o pagamento?',
+    a: 'Você chama no WhatsApp com o modelo escolhido. Respondemos em até 1 dia útil com o link de pagamento por Pix ou cartão.',
+  },
+  {
+    q: 'Quanto tempo demora para chegar?',
+    a: 'Postamos em até 2 dias úteis depois do pagamento e enviamos o código de rastreio pelo WhatsApp.',
+  },
+]
+
 export function formatPrice(value) {
   return `R$ ${value.toLocaleString('pt-BR')}`
 }

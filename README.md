@@ -1,6 +1,6 @@
 # GM NICHE
 
-Site da marca GM NICHE: pulseiras em edição limitada compatíveis com WHOOP 4.0 e MG, com carrinho de compras.
+Site da marca GM NICHE: pulseiras em edição limitada compatíveis com WHOOP 5.0 e MG, com carrinho de compras.
 
 ## Rodar no computador
 

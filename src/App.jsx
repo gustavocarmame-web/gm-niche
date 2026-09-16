@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, CaretLeft, CaretRight, Check, Handbag, List, Minus, Plus, Trash, X } from '@phosphor-icons/react'
-import { products, packs, faqs, formatPrice, findProduct, findPack, CHECKOUT_URL, SERIES, COMPATIBILITY, FINISH_SWATCH, BEST_SELLER_IDS, SERIES_COVER } from './data/products.js'
+import { products, packs, faqs, formatPrice, findProduct, findPack, CHECKOUT_URL, SERIES, COMPATIBILITY, FINISH_SWATCH, BEST_SELLER_IDS, SERIES_COVER, WHOOP_MODELS } from './data/products.js'
 import { Link, useRoute, useTitle } from './router.jsx'
 import { CartProvider, useCart } from './cart.jsx'
 
@@ -544,6 +544,36 @@ function Gallery({ photos, name }) {
   )
 }
 
+// Required choice of the customer's WHOOP model. Shows an inline message when the buy button
+// is pressed without a choice; the caller scrolls here and focuses the first option.
+function ModelPicker({ value, onChange, missing, name, pickerRef }) {
+  const hintId = `${name}-hint`
+  return (
+    <fieldset className="model-picker" ref={pickerRef} data-missing={missing} aria-describedby={missing ? hintId : undefined}>
+      <legend>Modelo da sua WHOOP</legend>
+      <div className="model-options">
+        {WHOOP_MODELS.map((m) => (
+          <label key={m.key} className="model-option">
+            <input type="radio" name={name} value={m.key} checked={value === m.key} onChange={() => onChange(m.key)} />
+            <span>{m.label}</span>
+          </label>
+        ))}
+      </div>
+      {missing && <p className="model-hint" id={hintId} role="alert">Escolha o modelo da sua WHOOP para continuar.</p>}
+    </fieldset>
+  )
+}
+
+const modelLabel = (key) => WHOOP_MODELS.find((m) => m.key === key)?.label
+
+// Scroll the picker into view and focus its first option.
+function askForModel(ref) {
+  const el = ref.current
+  if (!el) return
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  el.querySelector('input')?.focus({ preventScroll: true })
+}
+
 function ProductPage({ id }) {
   const p = findProduct(id)
   const cart = useCart()
@@ -554,6 +584,9 @@ function ProductPage({ id }) {
   })
   const [qty, setQty] = useState(1)
   const [added, setAdded] = useState(false)
+  const [model, setModel] = useState(null)
+  const [modelMissing, setModelMissing] = useState(false)
+  const pickerRef = useRef(null)
   const buyRef = useRef(null)
   const [buyVisible, setBuyVisible] = useState(true)
   useTitle(p ? `${p.name} | GM NICHE` : 'Produto não encontrado | GM NICHE')
@@ -583,16 +616,17 @@ function ProductPage({ id }) {
   if (!p) return <NotFound />
 
   const variant = p.variants.find((v) => v.key === variantKey) ?? p.variants[0]
-  const lineKey = `product:${p.id}:${variant.key}`
+  const lineKey = `product:${p.id}:${variant.key}:${model}`
   // Stock is per product, shared across finishes.
   const inCart = cart.items.filter((l) => l.refId === p.id && l.kind === 'product').reduce((n, l) => n + l.qty, 0)
   const left = Math.max(0, p.stock - inCart)
   const others = products.filter((o) => o.id !== p.id && o.series === p.series).concat(products.filter((o) => o.series !== p.series)).slice(0, 4)
 
   const addToCart = () => {
+    if (!model) { setModelMissing(true); askForModel(pickerRef); return }
     cart.add({
       key: lineKey, kind: 'product', refId: p.id,
-      name: p.name, detail: `Fecho ${variant.label.toLowerCase()}`, price: p.price, image: variant.photos[0].src,
+      name: p.name, detail: `Fecho ${variant.label.toLowerCase()}, ${modelLabel(model)}`, price: p.price, image: variant.photos[0].src,
       max: Math.min(p.stock, (cart.items.find((l) => l.key === lineKey)?.qty ?? 0) + left),
     }, Math.min(qty, left))
     setAdded(true)
@@ -625,6 +659,10 @@ function ProductPage({ id }) {
             </div>
           </fieldset>
 
+          {p.stock > 0 && (
+            <ModelPicker name="modelo" value={model} missing={modelMissing && !model} pickerRef={pickerRef} onChange={(m) => { setModel(m); setModelMissing(false) }} />
+          )}
+
           {p.stock === 0 ? (
             <button className="btn wide" disabled>Esgotado</button>
           ) : (
@@ -637,10 +675,6 @@ function ProductPage({ id }) {
             </div>
           )}
 
-          <dl className="specs">
-            <div><dt>Compatível</dt><dd>{COMPATIBILITY}</dd></div>
-            <div><dt>Acabamentos</dt><dd>{p.variants.map((v) => v.label).join(', ')}</dd></div>
-          </dl>
         </div>
       </div>
 
@@ -648,7 +682,7 @@ function ProductPage({ id }) {
         <div className="buy-bar" data-show={!buyVisible} inert={buyVisible} aria-hidden={buyVisible}>
           <div>
             <b>{formatPrice(p.price)}</b>
-            <span>Fecho {variant.label.toLowerCase()}</span>
+            <span>{model ? `Fecho ${variant.label.toLowerCase()}, ${modelLabel(model)}` : 'Escolha o modelo da WHOOP'}</span>
           </div>
           <button className="btn solid" onClick={addToCart} disabled={left === 0}>{left === 0 ? 'Limite' : 'Adicionar'}</button>
         </div>
@@ -671,6 +705,9 @@ function PackPage({ id }) {
   const cart = useCart()
   const [picked, setPicked] = useState([])
   const [series, setSeries] = useState('todas')
+  const [model, setModel] = useState(null)
+  const [modelMissing, setModelMissing] = useState(false)
+  const pickerRef = useRef(null)
   useTitle(pk ? `${pk.name} | GM NICHE` : 'Pack não encontrado | GM NICHE')
   if (!pk) return <NotFound />
 
@@ -681,10 +718,11 @@ function PackPage({ id }) {
   const names = picked.map((pid) => findProduct(pid).name)
 
   const addPack = () => {
+    if (!model) { setModelMissing(true); askForModel(pickerRef); return }
     const sorted = [...picked].sort()
     cart.add({
-      key: `pack:${pk.id}:${sorted.join('+')}`, kind: 'pack', refId: pk.id,
-      name: pk.name, detail: `${names.join(', ')}. Fecho prata.`, price: pk.price, image: findProduct(picked[0]).thumb,
+      key: `pack:${pk.id}:${sorted.join('+')}:${model}`, kind: 'pack', refId: pk.id,
+      name: pk.name, detail: `${names.join(', ')}. Fecho prata, ${modelLabel(model)}.`, price: pk.price, image: findProduct(picked[0]).thumb,
       max: Math.min(...picked.map((pid) => findProduct(pid).stock)),
     })
     setPicked([])
@@ -697,6 +735,7 @@ function PackPage({ id }) {
         <h1>{pk.name}</h1>
         <p>{pk.copy} Escolha {pk.size} modelos diferentes. Os packs saem com fecho prata.</p>
       </div>
+      <ModelPicker name="modelo-pack" value={model} missing={modelMissing && !model} pickerRef={pickerRef} onChange={(m) => { setModel(m); setModelMissing(false) }} />
       <div className="filters" role="group" aria-label="Filtrar por série">
         {FILTERS.map(([key, label]) => (
           <button key={key} className={series === key ? 'active' : ''} aria-pressed={series === key} onClick={() => setSeries(key)}>{label}</button>

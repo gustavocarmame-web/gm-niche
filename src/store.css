@@ -122,10 +122,25 @@
 .add-btn[data-added="true"] .add-label { opacity: 0; transform: translateY(-8px); filter: blur(2px); }
 .add-btn[data-added="true"] .add-done { opacity: 1; transform: none; filter: none; }
 .stock { font-size: 14px; color: var(--graphite); }
-.specs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0 0; }
-.specs div { display: flex; flex-direction: column; gap: 2px; padding: 16px; border-radius: var(--radius-sm); background: var(--mist); }
-.specs dt { font-size: 13px; color: var(--graphite); }
-.specs dd { margin: 0; font-weight: 600; }
+/* WHOOP model picker: two large tap targets, required before adding to the cart */
+.model-picker { border: 0; margin: 4px 0 0; padding: 0; scroll-margin: 96px; }
+.model-picker legend { padding: 0; margin-bottom: 10px; font-size: 15px; color: var(--graphite); }
+.model-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.model-option { position: relative; display: block; cursor: pointer; }
+.model-option input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.model-option span {
+  display: grid; place-items: center; min-height: 52px; padding: 10px 12px;
+  border: 1.5px solid var(--line); border-radius: var(--radius-sm); background: var(--paper);
+  font-size: 15px; font-weight: 600; letter-spacing: 0.02em; text-align: center;
+  transition: border-color .2s ease, background-color .2s ease, color .2s ease, transform .16s var(--ease);
+}
+.model-option:active span { transform: scale(0.98); }
+@media (hover: hover) and (pointer: fine) { .model-option:hover span { border-color: var(--ink); } }
+.model-option input:checked + span { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.model-option input:focus-visible + span { outline: 2px solid var(--ink); outline-offset: 2px; }
+.model-picker[data-missing="true"] .model-option span { border-color: #b3261e; }
+.model-hint { margin-top: 8px; font-size: 14px; font-weight: 500; color: #b3261e; }
+.pack-page .model-picker { max-width: 420px; }
 .pdp-more .section-title { margin-bottom: 28px; }
 .more-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 @media (max-width: 900px) {

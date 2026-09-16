@@ -8,8 +8,13 @@ import catalog from './catalog.json'
 export const DEFAULT_PRICE = 249
 export const DEFAULT_STOCK = 10
 
-// CONFIRMAR: uma das fotos diz "WHOOP 5.0/MG". Ajuste aqui se for o caso.
-export const COMPATIBILITY = 'WHOOP 4.0 e MG'
+export const COMPATIBILITY = 'WHOOP 5.0 e MG'
+
+// Modelos de WHOOP que o cliente escolhe ao comprar.
+export const WHOOP_MODELS = [
+  { key: 'whoop-5', label: 'WHOOP 5.0' },
+  { key: 'whoop-mg', label: 'WHOOP MG' },
+]
 
 // Gerado por scripts/import-products.mjs a partir das pastas de fotos.
 // Descrição e preço por produto podem ser adicionados aqui depois, pelo id.

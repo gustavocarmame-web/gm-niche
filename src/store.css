@@ -83,8 +83,11 @@
 }
 /* Gallery: fills the sticky stage; photo on top, thumbnails below */
 .gallery { position: absolute; inset: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 12px; padding: 24px var(--gutter) 20px; outline-offset: -4px; }
-.gallery-main { position: relative; min-height: 0; display: grid; place-items: center; }
-.gallery-main img { width: 100%; height: 100%; object-fit: contain; border-radius: var(--radius-sm); animation: fade-in .25s ease both; }
+/* The photo is absolutely positioned inside its row: a percentage height on a grid item with an
+   auto row never resolves, so tall photos used to take their natural height and slide under the thumbnails. */
+.gallery-main { position: relative; min-height: 0; overflow: hidden; }
+.gallery-main img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; border-radius: var(--radius-sm); animation: fade-in .25s ease both; }
+.gallery-arrow { z-index: 1; }
 .gallery-arrow {
   position: absolute; top: 50%; translate: 0 -50%; display: grid; place-items: center;
   width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.92);

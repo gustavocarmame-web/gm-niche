@@ -59,15 +59,15 @@ export const FINISH_SWATCH = {
   unico: '#d9d9d9',
 }
 
-// TROCAR: produtos da seção "Mais vendidos", na ordem em que aparecem. Use o id do produto.
+// Produtos da seção "Mais vendidos", na ordem em que aparecem. Use o id do produto.
+// Para abrir o card em um fecho específico, use "id:fecho" (ex.: 'rolex-marrom:dourado').
 export const BEST_SELLER_IDS = [
-  'rolex-branco',
-  'gods-plan',
-  'rolex-diamante-branco-dourado',
+  'fuck-9-5',
+  'fuck-love-get-money',
   'no-risk-no-story-preto',
+  'rolex-marrom:dourado',
   'saint',
   'faith-over-fear',
-  'rolex-marrom',
   'dream-big-work-hard',
 ]
 

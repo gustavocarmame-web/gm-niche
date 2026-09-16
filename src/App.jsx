@@ -241,8 +241,8 @@ function Hero() {
 
 // Product card: photo + name + price, then one dot per clasp finish. Tapping a dot swaps
 // the photo in place; the link carries the chosen finish into the product page.
-function ProductCard({ p, eager = false }) {
-  const [key, setKey] = useState(p.variants[0].key)
+function ProductCard({ p, eager = false, finish }) {
+  const [key, setKey] = useState(() => (p.variants.some((x) => x.key === finish) ? finish : p.variants[0].key))
   const v = p.variants.find((x) => x.key === key) ?? p.variants[0]
   const href = p.variants.length > 1 ? `/produto/${p.id}?acabamento=${v.key}` : `/produto/${p.id}`
   return (
@@ -276,7 +276,14 @@ function ProductCard({ p, eager = false }) {
   )
 }
 
-const BEST_SELLERS = BEST_SELLER_IDS.map(findProduct).filter(Boolean)
+// Entries are "id" or "id:finish"; the finish picks which clasp the card opens on.
+const BEST_SELLERS = BEST_SELLER_IDS
+  .map((entry) => {
+    const [id, finish] = entry.split(':')
+    const product = findProduct(id)
+    return product && { product, finish }
+  })
+  .filter(Boolean)
 
 // One product per view on phones, several on desktop. Manual only: swipe or arrows, no autoplay.
 function BestSellers() {
@@ -319,8 +326,8 @@ function BestSellers() {
     <section className="section best" id="mais-vendidos" aria-roledescription="carrossel" aria-label="Mais vendidos">
       <h2 className="section-title">Mais vendidos</h2>
       <ul className="best-track" ref={track}>
-        {BEST_SELLERS.map((p, i) => (
-          <li key={p.id} aria-label={`${i + 1} de ${count}`}><ProductCard p={p} eager={i < 2} /></li>
+        {BEST_SELLERS.map(({ product: p, finish }, i) => (
+          <li key={p.id} aria-label={`${i + 1} de ${count}`}><ProductCard p={p} finish={finish} eager={i < 2} /></li>
         ))}
       </ul>
       <div className="slider-nav">

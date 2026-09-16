@@ -25,7 +25,10 @@ const HIDDEN_FINISHES = {
   'you-are-your-only-limit': ['prata'],
 }
 
-const displayName = (name) => name.replace(/FUCK/gi, 'F*CK')
+// Trocas aplicadas só no que o site mostra (nomes de produtos e de coleções).
+// As pastas de fotos, os ids e os endereços das páginas continuam iguais.
+const RLX = 'RLX x WHOOP WHO CARES I´M ALREADY LATE'
+const displayName = (name) => name.replace(/FUCK/gi, 'F*CK').replace(/ROLEX/gi, RLX)
 
 export const products = catalog.map((p) => {
   const hidden = HIDDEN_FINISHES[p.id] ?? []
@@ -38,7 +41,7 @@ export const products = catalog.map((p) => {
     variants,
     thumb: variants[0].thumb,
     // The ROLEX DIAMANTE folder (one product per photo) is its own series.
-    series: p.group === 'rolex-diamante' ? 'Rolex Diamante' : p.series,
+    series: displayName(p.group === 'rolex-diamante' ? 'Rolex Diamante' : p.series),
     price: DEFAULT_PRICE,
     stock: DEFAULT_STOCK,
     blurb: '',
@@ -46,11 +49,11 @@ export const products = catalog.map((p) => {
   }
 })
 
-export const SERIES = ['Rolex', 'Rolex Diamante', 'No Risk', 'Gods Plan', 'Estampas']
+export const SERIES = ['Rolex', 'Rolex Diamante', 'No Risk', 'Gods Plan', 'Estampas'].map(displayName)
 
 // Cover image of each series card (product id). Series without an entry use their first product.
 export const SERIES_COVER = {
-  'Rolex Diamante': 'rolex-diamante-branco-dourado',
+  [displayName('Rolex Diamante')]: 'rolex-diamante-branco-dourado',
 }
 
 // Color of each clasp-finish dot on product cards.

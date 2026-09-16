@@ -674,7 +674,8 @@ function PackPage({ id }) {
   useTitle(pk ? `${pk.name} | GM NICHE` : 'Pack não encontrado | GM NICHE')
   if (!pk) return <NotFound />
 
-  const available = products.filter((p) => p.stock > 0 && (series === 'todas' || p.series === series))
+  // Packs ship with a silver clasp, so only products sold in silver can be picked.
+  const available = products.filter((p) => p.stock > 0 && p.variants.some((v) => v.key === 'prata') && (series === 'todas' || p.series === series))
   const full = picked.length === pk.size
   const toggle = (pid) => setPicked((cur) => (cur.includes(pid) ? cur.filter((x) => x !== pid) : cur.length < pk.size ? [...cur, pid] : cur))
   const names = picked.map((pid) => findProduct(pid).name)

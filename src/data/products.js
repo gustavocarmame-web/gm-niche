@@ -15,15 +15,27 @@ export const COMPATIBILITY = 'WHOOP 4.0 e MG'
 // Descrição e preço por produto podem ser adicionados aqui depois, pelo id.
 const OVERRIDES = {}
 
-export const products = catalog.map((p) => ({
-  ...p,
-  // The ROLEX DIAMANTE folder (one product per photo) is its own series.
-  series: p.group === 'rolex-diamante' ? 'Rolex Diamante' : p.series,
-  price: DEFAULT_PRICE,
-  stock: DEFAULT_STOCK,
-  blurb: '',
-  ...OVERRIDES[p.id],
-}))
+// Acabamentos que não aparecem no site, por produto (id). As fotos continuam na pasta.
+const HIDDEN_FINISHES = {
+  'you-are-your-only-limit': ['prata'],
+}
+
+export const products = catalog.map((p) => {
+  const hidden = HIDDEN_FINISHES[p.id] ?? []
+  const shown = p.variants.filter((v) => !hidden.includes(v.key))
+  const variants = shown.length ? shown : p.variants
+  return {
+    ...p,
+    variants,
+    thumb: variants[0].thumb,
+    // The ROLEX DIAMANTE folder (one product per photo) is its own series.
+    series: p.group === 'rolex-diamante' ? 'Rolex Diamante' : p.series,
+    price: DEFAULT_PRICE,
+    stock: DEFAULT_STOCK,
+    blurb: '',
+    ...OVERRIDES[p.id],
+  }
+})
 
 export const SERIES = ['Rolex', 'Rolex Diamante', 'No Risk', 'Gods Plan', 'Estampas']
 

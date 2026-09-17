@@ -379,10 +379,7 @@ function Featured() {
   return (
     <section className="section feature" id="destaque">
       <div className="feature-copy">
-        <h2 className="feature-title">
-          <img className="feature-logo" src="/logo.png" width="1200" height="145" alt="GM NICHE" />
-        </h2>
-        <p className="feature-statement">Não é sobre pulseiras, é sobre <span className="gold-text">lifestyle</span>.</p>
+        <h2 className="feature-statement">Não é sobre pulseiras, é sobre <span className="gold-text">lifestyle</span>.</h2>
         <Link to="/colecao" className="btn solid">Descubra seu estilo</Link>
       </div>
       <div className="feature-media">

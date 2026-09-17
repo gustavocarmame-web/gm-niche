@@ -380,7 +380,7 @@ function Featured() {
     <section className="section feature" id="destaque">
       <div className="feature-copy">
         <h2 className="feature-statement">Não é sobre pulseiras, é sobre <span className="gold-text">lifestyle</span>.</h2>
-        <Link to="/colecao" className="btn solid">Descubra seu estilo</Link>
+        <Link to="/colecao" className="btn solid">Descubra o seu</Link>
       </div>
       <div className="feature-media">
         <img src="/lifestyle.webp" alt="Pulseira F*CK 9-5 no pulso, em uma mesa à beira-mar ao pôr do sol" width="1122" height="1402" loading="lazy" decoding="async" />

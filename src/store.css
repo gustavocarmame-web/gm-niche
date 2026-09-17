@@ -421,3 +421,7 @@
   .pack-bar-buy .btn { flex: 1; min-height: 46px; padding-inline: 14px; font-size: 14px; }
   .pack-bar-buy .pack-price b { font-size: 18px; }
 }
+
+/* Featured CTA centered on every screen size */
+.feature-copy .btn { align-self: center; }
+@media (max-width: 799px) { .feature-copy .btn { width: auto; padding-inline: 32px; } }

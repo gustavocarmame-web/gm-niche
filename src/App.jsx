@@ -395,8 +395,10 @@ function Featured() {
 function Categories() {
   const cats = SERIES.filter((s) => s !== 'Estampas').map((s) => {
     const items = products.filter((p) => p.series === s)
-    const cover = findProduct(SERIES_COVER[s]) ?? items[0]
-    return { key: s, label: s, img: cover.thumb, text: `${items.length} ${items.length === 1 ? 'modelo' : 'modelos'}` }
+    const [coverId, coverFinish] = (SERIES_COVER[s] ?? '').split(':')
+    const cover = findProduct(coverId) ?? items[0]
+    const coverImg = cover?.variants.find((v) => v.key === coverFinish)?.thumb ?? cover?.thumb
+    return { key: s, label: s, img: coverImg, text: `${items.length} ${items.length === 1 ? 'modelo' : 'modelos'}` }
   }).filter((c) => c.img)
   return (
     <section className="section categories">

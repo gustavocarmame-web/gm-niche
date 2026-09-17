@@ -29,7 +29,28 @@ const HIDDEN_FINISHES = {
 const WHO_CARES = 'WHO CARES I´M ALREADY LATE'
 const displayName = (name) => name.replace(/FUCK/gi, 'F*CK').replace(/ROLEX/gi, WHO_CARES)
 
-export const products = catalog.map((p) => {
+// Produtos que viram um só, com os fechos de cada parte como opções. Ordem dos fechos segue a lista.
+// Endereços antigos das partes continuam funcionando e abrem o produto unido.
+const MERGES = [
+  { id: 'rolex-diamante-branco', name: 'ROLEX DIAMANTE BRANCO', parts: ['rolex-diamante-branco-prata', 'rolex-diamante-branco-dourado'] },
+]
+const ALIASES = Object.fromEntries(MERGES.flatMap((m) => m.parts.map((part) => [part, m.id])))
+
+function applyMerges(list) {
+  let out = list
+  for (const m of MERGES) {
+    const parts = m.parts.map((id) => out.find((p) => p.id === id)).filter(Boolean)
+    if (parts.length < 2) continue
+    const variants = parts.flatMap((p) => p.variants).filter((v, i, all) => all.findIndex((x) => x.key === v.key) === i)
+    const merged = { ...parts[0], id: m.id, name: m.name, thumb: variants[0].thumb, variants }
+    const at = out.indexOf(parts[0])
+    out = out.filter((p) => !m.parts.includes(p.id))
+    out.splice(Math.min(at, out.length), 0, merged)
+  }
+  return out
+}
+
+export const products = applyMerges(catalog).map((p) => {
   const hidden = HIDDEN_FINISHES[p.id] ?? []
   const shown = p.variants.filter((v) => !hidden.includes(v.key))
   const variants = shown.length ? shown : p.variants
@@ -50,9 +71,9 @@ export const products = catalog.map((p) => {
 
 export const SERIES = ['Rolex', 'Rolex Diamante', 'No Risk', 'Gods Plan', 'Estampas'].map(displayName)
 
-// Cover image of each series card (product id). Series without an entry use their first product.
+// Cover image of each series card ("id" or "id:fecho"). Series without an entry use their first product.
 export const SERIES_COVER = {
-  [displayName('Rolex Diamante')]: 'rolex-diamante-branco-dourado',
+  [displayName('Rolex Diamante')]: 'rolex-diamante-branco:dourado',
 }
 
 // Color of each clasp-finish dot on product cards.
@@ -104,7 +125,7 @@ export function packSavings(pk) {
   return { full, amount, percent: full ? Math.floor((amount / full) * 100) : 0 }
 }
 
-export const findProduct = (id) => products.find((p) => p.id === id)
+export const findProduct = (id) => products.find((p) => p.id === (ALIASES[id] ?? id))
 export const productImage = (id) => findProduct(id)?.thumb
 export const findPack = (id) => packs.find((p) => p.id === id)
 

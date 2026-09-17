@@ -17,7 +17,19 @@ export const WHOOP_MODELS = [
 
 // Gerado por scripts/import-products.mjs a partir das pastas de fotos.
 // Descrição e preço por produto podem ser adicionados aqui depois, pelo id.
-const OVERRIDES = {}
+//
+// Os nomes abaixo corrigem erros de digitação que vieram do nome da pasta de fotos.
+// Cada um foi conferido contra o que está impresso na própria pulseira.
+// As chaves continuam com a grafia errada de propósito: são os ids, e mudá-los
+// quebraria o endereço da página, a pasta das fotos e o carrinho já salvo.
+const OVERRIDES = {
+  'i-fell-like-pablo': { name: 'I FEEL LIKE PABLO' },
+  'my-only-competition-is-my-potencial': { name: 'MY ONLY COMPETITION IS MY POTENTIAL' },
+  'need-money-for-everythink': { name: 'NEED MONEY FOR EVERYTHING' },
+  'need-money-for-porche': { name: 'NEED MONEY FOR PORSCHE' },
+  'no-risk-no-porche-azul': { name: 'NO RISK NO PORSCHE AZUL' },
+  'sorry-i-dont-care': { name: "SORRY I DON'T CARE" },
+}
 
 // Acabamentos que não aparecem no site, por produto (id). As fotos continuam na pasta.
 const HIDDEN_FINISHES = {
@@ -26,8 +38,15 @@ const HIDDEN_FINISHES = {
 
 // Trocas aplicadas só no que o site mostra (nomes de produtos e de coleções).
 // As pastas de fotos, os ids e os endereços das páginas continuam iguais.
-const WHO_CARES = 'WHO CARES I´M ALREADY LATE'
-const displayName = (name) => name.replace(/FUCK/gi, 'F*CK').replace(/ROLEX/gi, WHO_CARES)
+const WHO_CARES = "WHO CARES I'M ALREADY LATE"
+const displayName = (name) => name
+  .replace(/FUCK/gi, 'F*CK')
+  .replace(/ROLEX/gi, WHO_CARES)
+  // A pulseira traz GOD'S PLAN com apóstrofo. As duas formas cobrem o nome do
+  // produto (maiúsculas) e o rótulo da coleção, que precisam continuar iguais
+  // para o filtro de coleções seguir casando.
+  .replace(/GODS PLAN/g, "GOD'S PLAN")
+  .replace(/Gods Plan/g, "God's Plan")
 
 // Produtos que viram um só, com os fechos de cada parte como opções. Ordem dos fechos segue a lista.
 // Endereços antigos das partes continuam funcionando e abrem o produto unido.
